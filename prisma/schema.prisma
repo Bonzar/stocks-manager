@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_SHADOW_URL")
+}
+
+model DryPowder {
+  id        Int     @id @default(autoincrement())
+  quantity  Int     @default(0)
+  code      String? @unique
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @unique
+}
+
+model Product {
+  id                Int                @id @default(autoincrement())
+  name              String             @unique
+  dryPowder         DryPowder?
+  productVariations ProductVariation[]
+}
+
+model VariationType {
+  id                Int                @id @default(autoincrement())
+  name              String             @unique
+  productVariations ProductVariation[]
+}
+
+model VariationVolume {
+  id                Int                @id @default(autoincrement())
+  name              String             @unique
+  minCount          Int
+  priority          Int                @unique
+  dryCoefficient    Float
+  productVariations ProductVariation[]
+}
+
+model ProductVariation {
+  id                  Int                  @id @default(autoincrement())
+  quantity            Int
+  description         String?
+  product             Product              @relation(fields: [productId], references: [id])
+  productId           Int
+  variationType       VariationType        @relation(fields: [variationTypeId], references: [id])
+  variationTypeId     Int
+  variationVolume     VariationVolume?     @relation(fields: [variationVolumeId], references: [id])
+  variationVolumeId   Int?
+  setComponents       VariationSet[]       @relation("ComponentVariation")
+  setParentVariation  VariationSet?        @relation("ParentVariation")
+  marketplaceProducts MarketplaceProduct[]
+
+  @@unique([productId, variationVolumeId])
+}
+
+model VariationSet {
+  id                   Int              @id @default(autoincrement())
+  parentVariationId    Int              @unique
+  componentVariationId Int
+  parentVariation      ProductVariation @relation("ParentVariation", fields: [parentVariationId], references: [id])
+  componentVariation   ProductVariation @relation("ComponentVariation", fields: [componentVariationId], references: [id])
+
+  @@unique([parentVariationId, componentVariationId])
+}
+
+model MarketplaceProduct {
+  id                    Int              @id @default(autoincrement())
+  productVariationId    Int
+  externalId            String
+  isActive              Boolean          @default(true)
+  quantityOnMarketplace Int?
+  marketplace           Marketplace      @relation(fields: [marketplaceId], references: [id])
+  marketplaceId         Int
+  productVariation      ProductVariation @relation(fields: [productVariationId], references: [id])
+}
+
+model Marketplace {
+  id                  Int                  @id @default(autoincrement())
+  name                String               @unique
+  coefficient         Float
+  haveWarehouse       Boolean
+  marketplaceProducts MarketplaceProduct[]
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  action    String
+  details   String
+  timestamp DateTime
+}
