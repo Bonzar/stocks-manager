@@ -1,24 +1,22 @@
 import { IProductSchema, productSchema } from "./schemas/productSchema.js";
 import { FastifyPluginAsync } from "fastify";
-import {
-  idParamsSchema,
-  IIdParamsSchema,
-} from "../../schemas/idParamsSchema.js";
+import { idObjSchema, IIdObjSchema } from "../../schemas/idSchema.js";
 
-const fp: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.get<{ Params: IIdParamsSchema; Reply: IProductSchema }>(
+const fp: FastifyPluginAsync = async (fastify, opts) => {
+  fastify.get<{ Params: IIdObjSchema; Reply: IProductSchema }>(
     "/:id",
     {
       schema: {
-        params: idParamsSchema,
+        tags: ["Product"],
+        params: idObjSchema,
         response: { 200: productSchema },
       },
     },
     async function (request, reply) {
       const productService = fastify.productService;
-      const productId = request.params.id;
+      const { id } = request.params;
 
-      return productService.getProductById(productId);
+      return productService.getOneById(id);
     },
   );
 };

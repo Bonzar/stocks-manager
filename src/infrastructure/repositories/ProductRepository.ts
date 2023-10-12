@@ -1,20 +1,16 @@
 import { Product } from "../../domain/models/Product.js";
-import type { IProductRepository } from "../../domain/interfaces/IProductRepository.js";
-import type {
-  Prisma as P,
-  PrismaClient,
-  Product as IProduct,
-} from "@prisma/client";
+import { IProductRepository } from "../../domain/interfaces/repositories/IProductRepository.js";
+import type { Prisma, PrismaClient, Product as IProduct } from "@prisma/client";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async getAll(): Promise<Product[]> {
+  public async getAll(): Promise<Product[]> {
     const productsDto = await this.prisma.product.findMany();
     return productsDto.map(this.toDomainModel);
   }
 
-  async getOneById(id: number): Promise<Product> {
+  public async getOneById(id: number): Promise<Product> {
     const productDto = await this.prisma.product.findUniqueOrThrow({
       where: { id },
     });
@@ -22,15 +18,15 @@ export class ProductRepository implements IProductRepository {
     return this.toDomainModel(productDto);
   }
 
-  async create(data: P.ProductCreateInput): Promise<Product> {
+  public async create(data: Prisma.ProductCreateInput): Promise<Product> {
     const productDto = await this.prisma.product.create({ data });
 
     return this.toDomainModel(productDto);
   }
 
-  async updateOneById(
+  public async updateOneById(
     id: number,
-    data: P.ProductUpdateInput,
+    data: Prisma.ProductUpdateInput,
   ): Promise<Product> {
     const productDto = await this.prisma.product.update({
       where: { id },
@@ -40,7 +36,7 @@ export class ProductRepository implements IProductRepository {
     return this.toDomainModel(productDto);
   }
 
-  async deleteOneById(id: number): Promise<Product> {
+  public async deleteOneById(id: number): Promise<Product> {
     const productDto = await this.prisma.product.delete({ where: { id } });
 
     return this.toDomainModel(productDto);

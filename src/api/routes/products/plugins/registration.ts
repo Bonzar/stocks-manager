@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 import { ProductRepository } from "../../../../infrastructure/repositories/ProductRepository.js";
-import { ProductService } from "../../../../services/productService.js";
+import { ProductService } from "../../../../services/ProductService.js";
 
 declare module "fastify" {
   export interface FastifyInstance {
