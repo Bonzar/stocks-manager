@@ -6,7 +6,7 @@ export class ProductVariation implements IProductVariation {
     public quantity: IProductVariation["quantity"],
     public description: IProductVariation["description"],
     public productId: IProductVariation["productId"],
-    public variationTypeId: IProductVariation["variationTypeId"],
+    public variationType: IProductVariation["variationType"],
     public variationVolumeId: IProductVariation["variationVolumeId"],
   ) {}
 

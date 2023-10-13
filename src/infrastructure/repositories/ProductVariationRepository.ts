@@ -60,7 +60,7 @@ export class ProductVariationRepository implements IProductVariationRepository {
       productId,
       variationVolumeId,
       quantity,
-      variationTypeId,
+      variationType,
       description,
     } = productVariationDto;
 
@@ -69,7 +69,7 @@ export class ProductVariationRepository implements IProductVariationRepository {
       quantity,
       description,
       productId,
-      variationTypeId,
+      variationType,
       variationVolumeId,
     );
   }

@@ -8,7 +8,7 @@ export const productVariationUpdateSchema = {
     quantity: { type: "number" },
     description: { type: "string", nullable: true },
     productId: idSchema,
-    variationTypeId: idSchema,
+    variationType: { type: "string", enum: ["SET", "SIMPLE"] },
     variationVolumeId: { ...idSchema, nullable: true },
   },
 } as const satisfies JSONSchema;

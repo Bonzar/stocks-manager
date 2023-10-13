@@ -30,15 +30,15 @@ const fp: FastifyPluginAsync = async (fastify, opts) => {
       productId,
       quantity,
       description,
-      variationTypeId,
+      variationType,
       variationVolumeId,
     } = request.body;
 
     const createData: Prisma.ProductVariationCreateInput = {
       quantity,
       description,
+      variationType,
       product: { connect: { id: productId } },
-      variationType: { connect: { id: variationTypeId } },
     };
 
     if (typeof variationVolumeId === "number") {
