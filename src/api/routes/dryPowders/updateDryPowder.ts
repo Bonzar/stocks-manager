@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from "fastify";
+import { FastifyPluginAsync, RouteShorthandOptions } from "fastify";
 import {
   dryPowderSchema,
   IDryPowderSchema,
@@ -8,38 +8,35 @@ import {
   IDryPowderUpdateSchema,
 } from "./schemas/dryPowderUpdateSchema.js";
 import { idObjSchema, IIdObjSchema } from "../../schemas/idSchema.js";
+import { IRouteOption, IRouteOptions } from "../../types/IRouteOptions.js";
+
+const routeOpt = {
+  schema: {
+    tags: ["DryPowder"],
+    params: idObjSchema,
+    body: dryPowderUpdateSchema,
+    response: { 200: dryPowderSchema },
+  },
+} satisfies RouteShorthandOptions;
+
+type RouteOpt = IRouteOptions<
+  IRouteOption<"Params", IIdObjSchema>,
+  IRouteOption<"Body", IDryPowderUpdateSchema>,
+  IRouteOption<"Reply", IDryPowderSchema>
+>;
 
 const fp: FastifyPluginAsync = async (fastify, opts) => {
-  fastify.patch<{
-    Params: IIdObjSchema;
-    Body: IDryPowderUpdateSchema;
-    Reply: IDryPowderSchema;
-  }>(
-    "/:id",
-    {
-      schema: {
-        tags: ["DryPowder"],
-        params: idObjSchema,
-        body: dryPowderUpdateSchema,
-        response: { 200: dryPowderSchema },
-      },
-    },
-    async function (request, reply) {
-      const dryPowderService = fastify.dryPowderService;
-      const { id } = request.params;
-      const { code, quantity, productId } = request.body;
+  fastify.patch<RouteOpt>("/:id", routeOpt, async function (request, reply) {
+    const dryPowderService = fastify.dryPowderService;
+    const { id } = request.params;
+    const { code, quantity, productId } = request.body;
 
-      return dryPowderService.updateOneById(id, {
-        code,
-        quantity,
-        product: {
-          update: {
-            id: productId,
-          },
-        },
-      });
-    },
-  );
+    return dryPowderService.updateOneById(id, {
+      code,
+      quantity,
+      product: { update: { id: productId } },
+    });
+  });
 };
 
 export default fp;
