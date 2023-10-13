@@ -10,7 +10,7 @@
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && c8 tap --ts \"test/**/*.test.ts\"",
     "start": "npm run build:ts && fastify start -w -l info dist/app.js",
-    "build:ts": "tsc",
+    "build:ts": "npx prisma generate && tsc",
     "watch:ts": "tsc -w",
     "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
@@ -25,7 +25,7 @@
     "@fastify/swagger": "^8.11.0",
     "@fastify/type-provider-json-schema-to-ts": "^2.2.2",
     "@hapi/boom": "^10.0.1",
-    "@prisma/client": "^5.4.1",
+    "@prisma/client": "^5.4.2",
     "abort-controller": "^3.0.0",
     "abstract-logging": "^2.0.1",
     "aggregate-error": "^3.1.0",
