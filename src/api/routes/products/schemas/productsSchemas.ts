@@ -1,12 +1,13 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
-import { productSchema } from "./productSchema.js";
 import { productCreateSchema } from "./productCreateSchema.js";
+import { productUpdateSchema } from "./productUpdateSchema.js";
+import { idObjSchema } from "../../../schemas/idSchema.js";
 
 export const productsSchema = {
   $id: "Products",
   type: "array",
   items: {
-    $ref: "Product",
+    allOf: [idObjSchema, { $ref: "ProductCreate" }],
   },
 } as const satisfies JSONSchema;
 
@@ -14,7 +15,7 @@ export type IProductsSchema = RemoveIndex<
   FromSchema<
     typeof productsSchema,
     {
-      references: [typeof productSchema, typeof productCreateSchema];
+      references: [typeof productUpdateSchema, typeof productCreateSchema];
     }
   >
 >;

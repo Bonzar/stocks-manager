@@ -1,17 +1,16 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
-import { idSchema } from "../../../schemas/idSchema.js";
+import { dryPowderUpdateSchema } from "./dryPowderUpdateSchema.js";
 
 export const dryPowderCreateSchema = {
   $id: "DryPowderCreate",
   type: "object",
-  properties: {
-    code: { type: "string", nullable: true },
-    quantity: { type: "number" },
-    productId: idSchema,
-  },
+  $ref: "DryPowderUpdate",
   required: ["productId"],
 } as const satisfies JSONSchema;
 
 export type IDryPowderCreateSchema = RemoveIndex<
-  FromSchema<typeof dryPowderCreateSchema>
+  FromSchema<
+    typeof dryPowderCreateSchema,
+    { references: [typeof dryPowderUpdateSchema] }
+  >
 >;

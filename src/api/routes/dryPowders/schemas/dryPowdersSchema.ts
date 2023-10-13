@@ -1,12 +1,13 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
-import { dryPowderSchema } from "./dryPowderSchema.js";
 import { dryPowderCreateSchema } from "./dryPowderCreateSchema.js";
+import { idObjSchema } from "../../../schemas/idSchema.js";
+import { dryPowderUpdateSchema } from "./dryPowderUpdateSchema.js";
 
 export const dryPowdersSchema = {
   $id: "DryPowders",
   type: "array",
   items: {
-    $ref: "DryPowder",
+    allOf: [idObjSchema, { $ref: "DryPowderCreate" }],
   },
 } as const satisfies JSONSchema;
 
@@ -14,7 +15,7 @@ export type IDryPowdersSchema = RemoveIndex<
   FromSchema<
     typeof dryPowdersSchema,
     {
-      references: [typeof dryPowderSchema, typeof dryPowderCreateSchema];
+      references: [typeof dryPowderCreateSchema, typeof dryPowderUpdateSchema];
     }
   >
 >;

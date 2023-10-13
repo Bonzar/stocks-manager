@@ -1,5 +1,6 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
 import { idObjSchema } from "../../../schemas/idSchema.js";
+import { dryPowderUpdateSchema } from "./dryPowderUpdateSchema.js";
 import { dryPowderCreateSchema } from "./dryPowderCreateSchema.js";
 
 export const dryPowderSchema = {
@@ -11,6 +12,8 @@ export const dryPowderSchema = {
 export type IDryPowderSchema = RemoveIndex<
   FromSchema<
     typeof dryPowderSchema,
-    { references: [typeof dryPowderCreateSchema] }
+    {
+      references: [typeof dryPowderCreateSchema, typeof dryPowderUpdateSchema];
+    }
   >
 >;
