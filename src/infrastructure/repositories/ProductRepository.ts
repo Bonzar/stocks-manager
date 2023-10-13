@@ -1,6 +1,10 @@
 import { Product } from "../../domain/models/Product.js";
 import { IProductRepository } from "../../domain/interfaces/repositories/IProductRepository.js";
-import type { Prisma, PrismaClient, Product as IProduct } from "@prisma/client";
+import type {
+  Prisma,
+  PrismaClient,
+  Product as PrismaProduct,
+} from "@prisma/client";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient) {}
@@ -42,7 +46,7 @@ export class ProductRepository implements IProductRepository {
     return this.toDomainModel(productDto);
   }
 
-  private toDomainModel(productDto: IProduct): Product {
+  private toDomainModel(productDto: PrismaProduct): Product {
     return new Product(productDto.id, productDto.name);
   }
 }

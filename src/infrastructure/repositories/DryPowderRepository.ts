@@ -1,7 +1,7 @@
 import { IDryPowderRepository } from "../../domain/interfaces/repositories/IDryPowderRepository.js";
 import { DryPowder } from "../../domain/models/DryPowder.js";
 import {
-  DryPowder as IDryPowderPrisma,
+  DryPowder as PrismaDryPowder,
   Prisma,
   PrismaClient,
 } from "@prisma/client";
@@ -47,7 +47,7 @@ export class DryPowderRepository implements IDryPowderRepository {
     return this.toDomainModel(dryPowderDto);
   }
 
-  private toDomainModel(dryPowderDto: IDryPowderPrisma): DryPowder {
+  private toDomainModel(dryPowderDto: PrismaDryPowder): DryPowder {
     const { id, code, quantity, productId } = dryPowderDto;
 
     return new DryPowder(id, code, quantity, productId);
