@@ -8,7 +8,7 @@ export type IValidator<
 > = {
   createValidator(createData: OmitId<ModelCreateType>): OmitId<ModelType>;
 
-  updateValidator(
-    updateData: Partial<OmitId<ModelType>>,
-  ): Partial<OmitId<ModelType>>;
+  updateValidator<T extends OmitId<ModelType>>(
+    updateData: Partial<T>,
+  ): Partial<T>;
 } & FieldsValidators<ModelType>;
