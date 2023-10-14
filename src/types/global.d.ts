@@ -1,3 +1,5 @@
+import { Omit } from "@prisma/client/runtime/library.js";
+
 export {};
 
 declare global {
@@ -14,4 +16,6 @@ declare global {
           ? never
           : K]: T[K] extends object ? RemoveIndex<T<K>> : T[K];
       };
+
+  type OmitId<T extends Record<string, unknown>> = Omit<T, "id">;
 }

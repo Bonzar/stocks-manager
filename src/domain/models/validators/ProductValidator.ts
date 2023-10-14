@@ -1,36 +1,37 @@
-import { IBaseValidator } from "./IBaseValidator.js";
+import { IValidator } from "./IValidator.js";
 import { ICreateProduct, IProduct } from "../Product.js";
-import { Omit } from "@prisma/client/runtime/library.js";
+import { BaseValidator } from "./BaseValidator.js";
 
 export class ProductValidator
-  implements IBaseValidator<IProduct, ICreateProduct>
+  extends BaseValidator
+  implements IValidator<IProduct, ICreateProduct>
 {
-  public createValidator({
-    name,
-  }: Omit<ICreateProduct, "id">): Omit<IProduct, "id"> {
+  public createValidator({ name }: OmitId<ICreateProduct>): OmitId<IProduct> {
     return {
       name: this.nameValidator(name),
     };
   }
 
-  public updateValidator({ name }: Partial<Omit<IProduct, "id">>): void {
+  public updateValidator<T extends OmitId<IProduct>>({
+    name,
+  }: Partial<T>): Partial<T> {
+    const validatedData: Partial<T> = {};
+
     if (name !== undefined) {
-      this.nameValidator(name);
+      validatedData.name = this.nameValidator(name);
     }
+
+    return validatedData;
   }
 
-  public idValidator(id: IProduct["id"] | undefined): IProduct["id"] {
-    if (id === undefined) {
-      throw new Error("Product id cannot be empty");
-    }
+  public idValidator(id: IProduct["id"] | undefined) {
+    this.assertsDefined(id, "Product id cannot be empty");
 
     return id;
   }
 
-  private nameValidator(name: IProduct["name"] | undefined): IProduct["name"] {
-    if (name === undefined) {
-      throw new Error("Product name cannot be empty");
-    }
+  public nameValidator(name: IProduct["name"] | undefined) {
+    this.assertsDefined(name, "Product name cannot be empty");
 
     return name;
   }

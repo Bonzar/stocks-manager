@@ -1,15 +1,16 @@
-import { IBaseValidator } from "./IBaseValidator.js";
+import { IValidator } from "./IValidator.js";
 import { ICreateDryPowder, IDryPowder } from "../DryPowder.js";
-import { Omit } from "@prisma/client/runtime/library.js";
+import { BaseValidator } from "./BaseValidator.js";
 
 export class DryPowderValidator
-  implements IBaseValidator<IDryPowder, ICreateDryPowder>
+  extends BaseValidator
+  implements IValidator<IDryPowder, ICreateDryPowder>
 {
   public createValidator({
     code,
     quantity,
     productId,
-  }: Omit<ICreateDryPowder, "id">): Omit<IDryPowder, "id"> {
+  }: OmitId<ICreateDryPowder>): OmitId<IDryPowder> {
     return {
       code: this.codeValidator(code),
       quantity: this.quantityValidator(quantity),
@@ -17,56 +18,44 @@ export class DryPowderValidator
     };
   }
 
-  public updateValidator({
+  public updateValidator<T extends OmitId<IDryPowder>>({
     code,
     quantity,
     productId,
-  }: Partial<Omit<IDryPowder, "id">>): void {
+  }: Partial<T>): Partial<T> {
+    const validationData: Partial<T> = {};
+
     if (code !== undefined) {
-      this.codeValidator(code);
+      validationData.code = this.codeValidator(code);
     }
     if (quantity !== undefined) {
-      this.quantityValidator(quantity);
+      validationData.quantity = this.quantityValidator(quantity);
     }
     if (productId !== undefined) {
-      this.productIdValidator(productId);
+      validationData.productId = this.productIdValidator(productId);
     }
+
+    return validationData;
   }
 
-  public idValidator(id: IDryPowder["id"] | undefined): IDryPowder["id"] {
-    if (id === undefined) {
-      throw new Error("DryPowder id cannot be empty");
-    }
+  public idValidator(id: IDryPowder["id"] | undefined) {
+    this.assertsDefined(id, "DryPowder id cannot be empty");
 
     return id;
   }
 
-  private codeValidator(
-    code: IDryPowder["code"] | undefined,
-  ): IDryPowder["code"] {
-    if (code === undefined) {
-      code = null;
-    }
-
-    return code;
+  public codeValidator(code: IDryPowder["code"] | undefined) {
+    return this.getValueOrDefault(code, null);
   }
 
-  private productIdValidator(
-    productId: IDryPowder["productId"] | undefined,
-  ): IDryPowder["productId"] {
-    if (productId === undefined) {
-      throw new Error("DryPowder productId cannot be empty");
-    }
+  public productIdValidator(productId: IDryPowder["productId"] | undefined) {
+    this.assertsDefined(productId, "DryPowder productId cannot be empty");
 
     return productId;
   }
 
-  private quantityValidator(
-    quantity: IDryPowder["quantity"] | undefined,
-  ): IDryPowder["quantity"] {
-    if (quantity === undefined) {
-      throw new Error("DryPowder quantity cannot be empty");
-    }
+  public quantityValidator(quantity: IDryPowder["quantity"] | undefined) {
+    this.assertsDefined(quantity, "DryPowder quantity cannot be empty");
 
     return quantity;
   }
