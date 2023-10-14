@@ -126,11 +126,6 @@ export class ProductVariationValidator
   ) {
     switch (variationType) {
       case "SIMPLE":
-        if (typeof variationVolumeId !== "number") {
-          throw new Error(
-            "ProductVariation when variationType == SIMPLE, variationVolumeId should be setting up",
-          );
-        }
         break;
       case "SET":
         if (variationVolumeId !== null) {
