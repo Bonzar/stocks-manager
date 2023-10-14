@@ -4,7 +4,6 @@ import { ProductVariationRepository } from "../../../../infrastructure/repositor
 
 declare module "fastify" {
   export interface FastifyInstance {
-    productVariationRepository: ProductVariationRepository;
     productVariationService: ProductVariationService;
   }
 }
@@ -19,5 +18,4 @@ export default fp(async (fastify, opt) => {
   );
 
   fastify.decorate("productVariationService", productVariationService);
-  fastify.decorate("productVariationRepository", productVariationRepository);
 });

@@ -5,7 +5,6 @@ import { DryPowderRepository } from "../../../../infrastructure/repositories/Dry
 declare module "fastify" {
   export interface FastifyInstance {
     dryPowderService: DryPowderService;
-    dryPowderRepository: DryPowderRepository;
   }
 }
 
@@ -14,5 +13,4 @@ export default fp(async (fastify, opt) => {
   const dryPowderService = new DryPowderService(dryPowderRepository);
 
   fastify.decorate("dryPowderService", dryPowderService);
-  fastify.decorate("dryPowderRepository", dryPowderRepository);
 });

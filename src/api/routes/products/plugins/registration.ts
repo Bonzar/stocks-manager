@@ -5,7 +5,6 @@ import { ProductService } from "../../../../services/ProductService.js";
 declare module "fastify" {
   export interface FastifyInstance {
     productService: ProductService;
-    productRepository: ProductRepository;
   }
 }
 
@@ -14,5 +13,4 @@ export default fp(async (fastify, opt) => {
   const productService = new ProductService(productRepository);
 
   fastify.decorate("productService", productService);
-  fastify.decorate("productRepository", productRepository);
 });

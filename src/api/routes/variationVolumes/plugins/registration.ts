@@ -4,7 +4,6 @@ import { VariationVolumeService } from "../../../../services/VariationVolumeServ
 
 declare module "fastify" {
   export interface FastifyInstance {
-    variationVolumeRepository: VariationVolumeRepository;
     variationVolumeService: VariationVolumeService;
   }
 }
@@ -18,6 +17,5 @@ export default fp(async (fastify) => {
     variationVolumeRepository,
   );
 
-  fastify.decorate("variationVolumeRepository", variationVolumeRepository);
   fastify.decorate("variationVolumeService", variationVolumeService);
 });
