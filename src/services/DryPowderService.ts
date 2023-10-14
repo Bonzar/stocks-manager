@@ -20,8 +20,10 @@ export class DryPowderService implements IDryPowderService {
   public create(data: ICreateDryPowder): Promise<IDryPowder> {
     DryPowder.validator.createValidator(data);
 
+    const { productId, ...otherData } = data;
+
     return this.dryPowderRepository.create({
-      ...data,
+      ...otherData,
       product: { connect: { id: data.productId } },
     });
   }

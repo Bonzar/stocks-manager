@@ -22,8 +22,10 @@ export class ProductVariationService implements IProductVariationService {
   public create(data: ICreateProductVariation): Promise<IProductVariation> {
     ProductVariation.validator.createValidator(data);
 
+    const { productId, variationVolumeId, ...otherData } = data;
+
     return this.productVariationRepository.create({
-      ...data,
+      ...otherData,
       product: { connect: { id: data.productId } },
       variationVolume:
         data.variationVolumeId === undefined || data.variationVolumeId === null
