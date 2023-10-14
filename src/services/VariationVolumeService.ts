@@ -1,13 +1,18 @@
-import { IVariationVolumeService } from "../domain/interfaces/services/IVariationVolumeService.js";
+import { VariationVolumeValidator } from "../domain/models/validators/VariationVolumeValidator.js";
 import {
   ICreateVariationVolume,
   IVariationVolume,
   VariationVolume,
 } from "../domain/models/VariationVolume.js";
-import { IVariationVolumeRepository } from "../domain/interfaces/repositories/IVariationVolumeRepository.js";
+import type { IVariationVolumeService } from "../domain/interfaces/services/IVariationVolumeService.js";
+import type { IVariationVolumeRepository } from "../domain/interfaces/repositories/IVariationVolumeRepository.js";
+import type { IVariationVolumeValidator } from "../domain/interfaces/validators/IVariationVolumeValidator.js";
 
 export class VariationVolumeService implements IVariationVolumeService {
-  constructor(private variationVolumeRepository: IVariationVolumeRepository) {}
+  constructor(
+    private variationVolumeRepository: IVariationVolumeRepository,
+    private variationVolumeValidator: IVariationVolumeValidator = new VariationVolumeValidator(),
+  ) {}
 
   getAll(): Promise<IVariationVolume[]> {
     return this.variationVolumeRepository.getAll();
@@ -18,7 +23,7 @@ export class VariationVolumeService implements IVariationVolumeService {
   }
 
   create(data: ICreateVariationVolume): Promise<IVariationVolume> {
-    VariationVolume.validator.createValidator(data);
+    this.variationVolumeValidator.createValidator(data);
 
     return this.variationVolumeRepository.create(data);
   }
@@ -27,7 +32,7 @@ export class VariationVolumeService implements IVariationVolumeService {
     id: IdType,
     data: Partial<IVariationVolume>,
   ): Promise<IVariationVolume> {
-    VariationVolume.validator.updateValidator(data);
+    this.variationVolumeValidator.updateValidator(data);
 
     return this.variationVolumeRepository.updateOneById(id, data);
   }

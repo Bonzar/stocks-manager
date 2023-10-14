@@ -1,10 +1,10 @@
-import { IValidator } from "./IValidator.js";
 import { ICreateDryPowder, IDryPowder } from "../DryPowder.js";
 import { BaseValidator } from "./BaseValidator.js";
+import { IDryPowderValidator } from "../../interfaces/validators/IDryPowderValidator.js";
 
 export class DryPowderValidator
   extends BaseValidator
-  implements IValidator<IDryPowder, ICreateDryPowder>
+  implements IDryPowderValidator
 {
   public createValidator({
     code,

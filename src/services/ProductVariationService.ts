@@ -1,14 +1,17 @@
+import { ProductVariationValidator } from "../domain/models/validators/ProductVariationValidator.js";
 import {
   ICreateProductVariation,
   IProductVariation,
   ProductVariation,
 } from "../domain/models/ProductVariation.js";
-import { IProductVariationService } from "../domain/interfaces/services/IProductVariationService.js";
-import { IProductVariationRepository } from "../domain/interfaces/repositories/IProductVariationRepository.js";
+import type { IProductVariationService } from "../domain/interfaces/services/IProductVariationService.js";
+import type { IProductVariationRepository } from "../domain/interfaces/repositories/IProductVariationRepository.js";
+import type { IProductVariationValidator } from "../domain/interfaces/validators/IProductVariationValidator.js";
 
 export class ProductVariationService implements IProductVariationService {
   constructor(
     private productVariationRepository: IProductVariationRepository,
+    private productVariationValidator: IProductVariationValidator = new ProductVariationValidator(),
   ) {}
 
   public getAll(): Promise<IProductVariation[]> {
@@ -20,7 +23,7 @@ export class ProductVariationService implements IProductVariationService {
   }
 
   public create(data: ICreateProductVariation): Promise<IProductVariation> {
-    ProductVariation.validator.createValidator(data);
+    this.productVariationValidator.createValidator(data);
 
     const { productId, variationVolumeId, ...otherData } = data;
 
@@ -38,7 +41,7 @@ export class ProductVariationService implements IProductVariationService {
     id: IdType,
     data: Partial<IProductVariation>,
   ): Promise<IProductVariation> {
-    ProductVariation.validator.updateValidator(data);
+    this.productVariationValidator.updateValidator(data);
 
     return this.productVariationRepository.updateOneById(id, data);
   }

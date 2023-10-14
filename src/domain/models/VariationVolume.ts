@@ -3,6 +3,7 @@ import {
   VariationVolume as PrismaVariationVolume,
 } from "@prisma/client";
 import { VariationVolumeValidator } from "./validators/VariationVolumeValidator.js";
+import { IVariationVolumeValidator } from "../interfaces/validators/IVariationVolumeValidator.js";
 
 export interface IVariationVolume extends PrismaVariationVolume {}
 
@@ -10,7 +11,8 @@ export interface ICreateVariationVolume
   extends Prisma.VariationVolumeUncheckedCreateInput {}
 
 export class VariationVolume implements IVariationVolume {
-  public static validator = new VariationVolumeValidator();
+  private variationVolumeValidator: IVariationVolumeValidator =
+    new VariationVolumeValidator();
 
   public id: IVariationVolume["id"];
   public name: IVariationVolume["name"];
@@ -19,9 +21,9 @@ export class VariationVolume implements IVariationVolume {
   public dryCoefficient: IVariationVolume["dryCoefficient"];
 
   constructor(data: IVariationVolume) {
-    const validatedData = VariationVolume.validator.createValidator(data);
+    const validatedData = this.variationVolumeValidator.createValidator(data);
 
-    this.id = VariationVolume.validator.idValidator(data.id);
+    this.id = this.variationVolumeValidator.idValidator(data.id);
 
     this.name = validatedData.name;
     this.priority = validatedData.priority;

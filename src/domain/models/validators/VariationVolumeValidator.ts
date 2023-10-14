@@ -1,13 +1,13 @@
-import { IValidator } from "./IValidator.js";
-import {
+import type {
   ICreateVariationVolume,
   IVariationVolume,
 } from "../VariationVolume.js";
 import { BaseValidator } from "./BaseValidator.js";
+import type { IVariationVolumeValidator } from "../../interfaces/validators/IVariationVolumeValidator.js";
 
 export class VariationVolumeValidator
   extends BaseValidator
-  implements IValidator<IVariationVolume, ICreateVariationVolume>
+  implements IVariationVolumeValidator
 {
   public createValidator({
     dryCoefficient,

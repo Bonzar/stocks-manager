@@ -1,9 +1,14 @@
+import { ProductValidator } from "../domain/models/validators/ProductValidator.js";
 import { ICreateProduct, IProduct, Product } from "../domain/models/Product.js";
-import { IProductService } from "../domain/interfaces/services/IProductService.js";
-import { IProductRepository } from "../domain/interfaces/repositories/IProductRepository.js";
+import type { IProductService } from "../domain/interfaces/services/IProductService.js";
+import type { IProductRepository } from "../domain/interfaces/repositories/IProductRepository.js";
+import type { IProductValidator } from "../domain/interfaces/validators/IProductValidator.js";
 
 export class ProductService implements IProductService {
-  constructor(private productRepository: IProductRepository) {}
+  constructor(
+    private productRepository: IProductRepository,
+    private productValidator: IProductValidator = new ProductValidator(),
+  ) {}
 
   public getAll(): Promise<IProduct[]> {
     return this.productRepository.getAll();
@@ -14,13 +19,13 @@ export class ProductService implements IProductService {
   }
 
   public create(data: ICreateProduct): Promise<IProduct> {
-    Product.validator.createValidator(data);
+    this.productValidator.createValidator(data);
 
     return this.productRepository.create(data);
   }
 
   public updateOneById(id: IdType, data: Partial<IProduct>): Promise<IProduct> {
-    Product.validator.updateValidator(data);
+    this.productValidator.updateValidator(data);
 
     return this.productRepository.updateOneById(id, data);
   }

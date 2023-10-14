@@ -17,5 +17,5 @@ declare global {
           : K]: T[K] extends object ? RemoveIndex<T<K>> : T[K];
       };
 
-  type OmitId<T extends Record<string, unknown>> = Omit<T, "id">;
+  type OmitId<T extends Record<unknown, unknown>> = Omit<T, "id">;
 }

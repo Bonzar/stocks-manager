@@ -1,10 +1,10 @@
-import { IValidator } from "./IValidator.js";
 import { ICreateProduct, IProduct } from "../Product.js";
 import { BaseValidator } from "./BaseValidator.js";
+import { IProductValidator } from "../../interfaces/validators/IProductValidator.js";
 
 export class ProductValidator
   extends BaseValidator
-  implements IValidator<IProduct, ICreateProduct>
+  implements IProductValidator
 {
   public createValidator({ name }: OmitId<ICreateProduct>): OmitId<IProduct> {
     return {

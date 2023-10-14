@@ -3,13 +3,13 @@ import {
   IProductVariation,
   ProductVariation,
 } from "../ProductVariation.js";
-import { IValidator } from "./IValidator.js";
 import { exhaustiveCheck } from "../../../utils/exhaustiveCheck.js";
 import { BaseValidator } from "./BaseValidator.js";
+import { IProductVariationValidator } from "../../interfaces/validators/IProductVariationValidator.js";
 
 export class ProductVariationValidator
   extends BaseValidator
-  implements IValidator<IProductVariation, ICreateProductVariation>
+  implements IProductVariationValidator
 {
   public createValidator = (
     createData: OmitId<ICreateProductVariation>,

@@ -2,6 +2,7 @@ import type {
   Prisma,
   ProductVariation as PrismaProductVariation,
 } from "@prisma/client";
+import type { IProductVariationValidator } from "../interfaces/validators/IProductVariationValidator.js";
 import { ProductVariationValidator } from "./validators/ProductVariationValidator.js";
 
 export interface IProductVariation extends PrismaProductVariation {}
@@ -10,7 +11,8 @@ export interface ICreateProductVariation
   extends Prisma.ProductVariationUncheckedCreateInput {}
 
 export class ProductVariation implements IProductVariation {
-  public static validator = new ProductVariationValidator();
+  private productVariationValidator: IProductVariationValidator =
+    new ProductVariationValidator();
 
   public id: IProductVariation["id"];
   public quantity: IProductVariation["quantity"];
@@ -20,9 +22,9 @@ export class ProductVariation implements IProductVariation {
   public description: IProductVariation["description"];
 
   constructor(data: IProductVariation) {
-    const validatedData = ProductVariation.validator.createValidator(data);
+    const validatedData = this.productVariationValidator.createValidator(data);
 
-    this.id = ProductVariation.validator.idValidator(data.id);
+    this.id = this.productVariationValidator.idValidator(data.id);
 
     this.description = validatedData.description;
     this.quantity = validatedData.quantity;

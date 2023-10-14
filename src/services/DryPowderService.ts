@@ -5,9 +5,14 @@ import type {
 import { DryPowder } from "../domain/models/DryPowder.js";
 import type { IDryPowderService } from "../domain/interfaces/services/IDryPowderService.js";
 import type { IDryPowderRepository } from "../domain/interfaces/repositories/IDryPowderRepository.js";
+import { DryPowderValidator } from "../domain/models/validators/DryPowderValidator.js";
+import { IDryPowderValidator } from "../domain/interfaces/validators/IDryPowderValidator.js";
 
 export class DryPowderService implements IDryPowderService {
-  constructor(private dryPowderRepository: IDryPowderRepository) {}
+  constructor(
+    private dryPowderRepository: IDryPowderRepository,
+    private dryPowderValidator: IDryPowderValidator = new DryPowderValidator(),
+  ) {}
 
   public getOneById(id: IdType): Promise<IDryPowder> {
     return this.dryPowderRepository.getOneById(id);
@@ -18,7 +23,7 @@ export class DryPowderService implements IDryPowderService {
   }
 
   public create(data: ICreateDryPowder): Promise<IDryPowder> {
-    DryPowder.validator.createValidator(data);
+    this.dryPowderValidator.createValidator(data);
 
     const { productId, ...otherData } = data;
 
@@ -32,7 +37,7 @@ export class DryPowderService implements IDryPowderService {
     id: IdType,
     data: Partial<IDryPowder>,
   ): Promise<IDryPowder> {
-    DryPowder.validator.updateValidator(data);
+    this.dryPowderValidator.updateValidator(data);
 
     return this.dryPowderRepository.updateOneById(id, data);
   }

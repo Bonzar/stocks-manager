@@ -3,8 +3,8 @@ type FieldsValidators<T> = {
 };
 
 export type IValidator<
-  ModelType extends Record<string, unknown>,
-  ModelCreateType extends Record<string, unknown>,
+  ModelType extends object,
+  ModelCreateType extends object,
 > = {
   createValidator(createData: OmitId<ModelCreateType>): OmitId<ModelType>;
 
