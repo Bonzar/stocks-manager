@@ -1,4 +1,4 @@
-import { IBaseCRUDRepository } from "./IBaseCRUDRepository.js";
+import { IBaseCRUDRepository } from "./base/IBaseCRUDRepository.js";
 import { IProduct } from "../../models/Product.js";
 import { Prisma } from "@prisma/client";
 
