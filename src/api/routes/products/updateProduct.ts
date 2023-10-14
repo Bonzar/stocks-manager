@@ -26,9 +26,8 @@ const fp: FastifyPluginAsync = async (fastify, opts) => {
   fastify.patch<RouteOpt>("/:id", routeOpt, async function (request, reply) {
     const productService = fastify.productService;
     const { id } = request.params;
-    const { name } = request.body;
 
-    return productService.updateOneById(id, { name });
+    return productService.updateOneById(id, request.body);
   });
 };
 

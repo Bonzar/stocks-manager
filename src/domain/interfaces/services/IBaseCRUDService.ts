@@ -1,15 +1,17 @@
 export interface IBaseCRUDService<
   Model extends object,
-  ModelCreateInput extends object,
-  ModelUpdateInput extends object,
+  ModelType extends object,
+  ModelCreateType extends object,
 > {
-  getAll(): Promise<Model[]>;
+  getAll(): Promise<ModelType[]>;
 
-  getOneById(id: IdType): Promise<Model>;
+  getOneById(id: IdType): Promise<ModelType>;
 
-  create(data: ModelCreateInput): Promise<Model>;
+  create(data: ModelCreateType): Promise<ModelType>;
 
-  updateOneById(id: IdType, data: ModelUpdateInput): Promise<Model>;
+  updateOneById(id: IdType, data: Partial<ModelType>): Promise<ModelType>;
 
-  deleteOneById(id: IdType): Promise<Model>;
+  deleteOneById(id: IdType): Promise<ModelType>;
+
+  toDomainModel(dto: ModelType): Model;
 }

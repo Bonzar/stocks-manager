@@ -1,9 +1,13 @@
 import { IBaseCRUDService } from "./IBaseCRUDService.js";
-import { Prisma, ProductVariation } from "@prisma/client";
+import {
+  ICreateProductVariation,
+  IProductVariation,
+  ProductVariation,
+} from "../../models/ProductVariation.js";
 
 export interface IProductVariationService
   extends IBaseCRUDService<
     ProductVariation,
-    Prisma.ProductVariationCreateInput,
-    Prisma.ProductVariationUpdateInput
+    IProductVariation,
+    ICreateProductVariation
   > {}

@@ -1,55 +1,35 @@
 import { IDryPowderRepository } from "../../domain/interfaces/repositories/IDryPowderRepository.js";
-import { DryPowder } from "../../domain/models/DryPowder.js";
-import {
-  DryPowder as PrismaDryPowder,
-  Prisma,
-  PrismaClient,
-} from "@prisma/client";
+import { IDryPowder } from "../../domain/models/DryPowder.js";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 export class DryPowderRepository implements IDryPowderRepository {
   constructor(private prisma: PrismaClient) {}
 
-  public async getAll(): Promise<DryPowder[]> {
-    const dryPowdersDto = await this.prisma.dryPowder.findMany();
-
-    return dryPowdersDto.map(this.toDomainModel);
+  public getAll(): Promise<IDryPowder[]> {
+    return this.prisma.dryPowder.findMany();
   }
 
-  public async getOneById(id: IdType): Promise<DryPowder> {
-    const dryPowderDto = await this.prisma.dryPowder.findUniqueOrThrow({
+  public getOneById(id: IdType): Promise<IDryPowder> {
+    return this.prisma.dryPowder.findUniqueOrThrow({
       where: { id },
     });
-
-    return this.toDomainModel(dryPowderDto);
   }
 
-  public async create(data: Prisma.DryPowderCreateInput): Promise<DryPowder> {
-    const dryPowderDto = await this.prisma.dryPowder.create({ data });
-
-    return this.toDomainModel(dryPowderDto);
+  public create(data: Prisma.DryPowderCreateInput): Promise<IDryPowder> {
+    return this.prisma.dryPowder.create({ data });
   }
 
-  public async deleteOneById(id: IdType): Promise<DryPowder> {
-    const dryPowderDto = await this.prisma.dryPowder.delete({ where: { id } });
-
-    return this.toDomainModel(dryPowderDto);
-  }
-
-  public async updateOneById(
+  public updateOneById(
     id: IdType,
     data: Prisma.DryPowderUpdateInput,
-  ): Promise<DryPowder> {
-    const dryPowderDto = await this.prisma.dryPowder.update({
+  ): Promise<IDryPowder> {
+    return this.prisma.dryPowder.update({
       where: { id },
       data,
     });
-
-    return this.toDomainModel(dryPowderDto);
   }
 
-  private toDomainModel(dryPowderDto: PrismaDryPowder): DryPowder {
-    const { id, code, quantity, productId } = dryPowderDto;
-
-    return new DryPowder(id, code, quantity, productId);
+  public deleteOneById(id: IdType): Promise<IDryPowder> {
+    return this.prisma.dryPowder.delete({ where: { id } });
   }
 }

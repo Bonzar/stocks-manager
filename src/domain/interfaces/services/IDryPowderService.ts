@@ -1,10 +1,9 @@
 import { IBaseCRUDService } from "./IBaseCRUDService.js";
-import { DryPowder } from "../../models/DryPowder.js";
-import { Prisma } from "@prisma/client";
+import {
+  DryPowder,
+  ICreateDryPowder,
+  IDryPowder,
+} from "../../models/DryPowder.js";
 
 export interface IDryPowderService
-  extends IBaseCRUDService<
-    DryPowder,
-    Prisma.DryPowderCreateInput,
-    Prisma.DryPowderUpdateInput
-  > {}
+  extends IBaseCRUDService<DryPowder, IDryPowder, ICreateDryPowder> {}

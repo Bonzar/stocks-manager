@@ -8,7 +8,6 @@ import {
   IProductVariationSchema,
   productVariationSchema,
 } from "./schemas/productVariationSchema.js";
-import { Prisma } from "@prisma/client";
 
 const routeOpt = {
   schema: {
@@ -26,26 +25,8 @@ type RouteOpt = IRouteOptions<
 const fp: FastifyPluginAsync = async (fastify, opts) => {
   fastify.post<RouteOpt>("/", routeOpt, async function (request, reply) {
     const productVariationService = fastify.productVariationService;
-    const {
-      productId,
-      quantity,
-      description,
-      variationType,
-      variationVolumeId,
-    } = request.body;
 
-    const createData: Prisma.ProductVariationCreateInput = {
-      quantity,
-      description,
-      variationType,
-      product: { connect: { id: productId } },
-    };
-
-    if (typeof variationVolumeId === "number") {
-      createData.variationVolume = { connect: { id: variationVolumeId } };
-    }
-
-    return productVariationService.create(createData);
+    return productVariationService.create(request.body);
   });
 };
 

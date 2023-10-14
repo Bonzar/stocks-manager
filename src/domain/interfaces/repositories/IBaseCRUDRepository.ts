@@ -1,15 +1,15 @@
 export interface IBaseCRUDRepository<
-  Model extends object,
-  ModelCreateInput extends object,
-  ModelUpdateInput extends object,
+  ModelType extends object,
+  DBCreateInput extends object,
+  DBUpdateInput extends object,
 > {
-  getAll(): Promise<Model[]>;
+  getAll(): Promise<ModelType[]>;
 
-  getOneById(id: IdType): Promise<Model>;
+  getOneById(id: IdType): Promise<ModelType>;
 
-  create(data: ModelCreateInput): Promise<Model>;
+  create(data: DBCreateInput): Promise<ModelType>;
 
-  updateOneById(id: IdType, data: ModelUpdateInput): Promise<Model>;
+  updateOneById(id: IdType, data: DBUpdateInput): Promise<ModelType>;
 
-  deleteOneById(id: IdType): Promise<Model>;
+  deleteOneById(id: IdType): Promise<ModelType>;
 }

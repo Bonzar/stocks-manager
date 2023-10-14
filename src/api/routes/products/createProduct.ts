@@ -22,9 +22,8 @@ type RouteOpt = IRouteOptions<
 const fp: FastifyPluginAsync = async (fastify, opts) => {
   fastify.post<RouteOpt>("/", routeOpt, async function (request, reply) {
     const productService = fastify.productService;
-    const { name } = request.body;
 
-    return productService.create({ name });
+    return productService.create(request.body);
   });
 };
 

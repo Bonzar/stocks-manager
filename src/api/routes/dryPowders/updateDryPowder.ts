@@ -29,13 +29,8 @@ const fp: FastifyPluginAsync = async (fastify, opts) => {
   fastify.patch<RouteOpt>("/:id", routeOpt, async function (request, reply) {
     const dryPowderService = fastify.dryPowderService;
     const { id } = request.params;
-    const { code, quantity, productId } = request.body;
 
-    return dryPowderService.updateOneById(id, {
-      code,
-      quantity,
-      product: { update: { id: productId } },
-    });
+    return dryPowderService.updateOneById(id, request.body);
   });
 };
 

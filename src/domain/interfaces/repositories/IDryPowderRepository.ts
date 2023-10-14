@@ -1,10 +1,10 @@
 import { IBaseCRUDRepository } from "./IBaseCRUDRepository.js";
-import { DryPowder } from "../../models/DryPowder.js";
+import { IDryPowder } from "../../models/DryPowder.js";
 import { Prisma } from "@prisma/client";
 
 export interface IDryPowderRepository
   extends IBaseCRUDRepository<
-    DryPowder,
+    IDryPowder,
     Prisma.DryPowderCreateInput,
     Prisma.DryPowderUpdateInput
   > {}

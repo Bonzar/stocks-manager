@@ -1,6 +1,9 @@
+import {
+  ICreateProductVariation,
+  IProductVariation,
+  ProductVariation,
+} from "../domain/models/ProductVariation.js";
 import { IProductVariationService } from "../domain/interfaces/services/IProductVariationService.js";
-import { Prisma } from "@prisma/client";
-import { ProductVariation } from "../domain/models/ProductVariation.js";
 import { IProductVariationRepository } from "../domain/interfaces/repositories/IProductVariationRepository.js";
 
 export class ProductVariationService implements IProductVariationService {
@@ -8,26 +11,43 @@ export class ProductVariationService implements IProductVariationService {
     private productVariationRepository: IProductVariationRepository,
   ) {}
 
-  create(data: Prisma.ProductVariationCreateInput): Promise<ProductVariation> {
-    return this.productVariationRepository.create(data);
-  }
-
-  deleteOneById(id: IdType): Promise<ProductVariation> {
-    return this.productVariationRepository.deleteOneById(id);
-  }
-
-  getAll(): Promise<ProductVariation[]> {
+  public getAll(): Promise<IProductVariation[]> {
     return this.productVariationRepository.getAll();
   }
 
-  getOneById(id: IdType): Promise<ProductVariation> {
+  public getOneById(id: IdType): Promise<IProductVariation> {
     return this.productVariationRepository.getOneById(id);
   }
 
-  updateOneById(
+  public create(data: ICreateProductVariation): Promise<IProductVariation> {
+    ProductVariation.validator.createValidator(data);
+
+    return this.productVariationRepository.create({
+      ...data,
+      product: { connect: { id: data.productId } },
+      variationVolume:
+        data.variationVolumeId === undefined || data.variationVolumeId === null
+          ? undefined
+          : { connect: { id: data.variationVolumeId } },
+    });
+  }
+
+  public updateOneById(
     id: IdType,
-    data: Prisma.ProductVariationUpdateInput,
-  ): Promise<ProductVariation> {
+    data: Partial<IProductVariation>,
+  ): Promise<IProductVariation> {
+    ProductVariation.validator.updateValidator(data);
+
     return this.productVariationRepository.updateOneById(id, data);
+  }
+
+  public deleteOneById(id: IdType): Promise<IProductVariation> {
+    return this.productVariationRepository.deleteOneById(id);
+  }
+
+  public toDomainModel(
+    productVariationDto: IProductVariation,
+  ): ProductVariation {
+    return new ProductVariation(productVariationDto);
   }
 }

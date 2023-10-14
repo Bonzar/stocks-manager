@@ -4,7 +4,6 @@ import {
   IProductVariationSchema,
   productVariationSchema,
 } from "./schemas/productVariationSchema.js";
-import { Prisma } from "@prisma/client";
 import {
   IProductVariationUpdateSchema,
   productVariationUpdateSchema,
@@ -30,26 +29,8 @@ const fp: FastifyPluginAsync = async (fastify, opts) => {
   fastify.patch<RouteOpt>("/:id", routeOpt, async function (request, reply) {
     const productVariationService = fastify.productVariationService;
     const { id } = request.params;
-    const {
-      productId,
-      quantity,
-      description,
-      variationType,
-      variationVolumeId,
-    } = request.body;
 
-    const updateData: Prisma.ProductVariationUpdateInput = {
-      quantity,
-      description,
-      variationType,
-      product: { connect: { id: productId } },
-    };
-
-    if (typeof variationVolumeId === "number") {
-      updateData.variationVolume = { connect: { id: variationVolumeId } };
-    }
-
-    return productVariationService.updateOneById(id, updateData);
+    return productVariationService.updateOneById(id, request.body);
   });
 };
 

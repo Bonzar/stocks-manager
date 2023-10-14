@@ -1,31 +1,45 @@
-import { IDryPowderService } from "../domain/interfaces/services/IDryPowderService.js";
+import type {
+  ICreateDryPowder,
+  IDryPowder,
+} from "../domain/models/DryPowder.js";
 import { DryPowder } from "../domain/models/DryPowder.js";
-import { IDryPowderRepository } from "../domain/interfaces/repositories/IDryPowderRepository.js";
-import { Prisma } from "@prisma/client";
+import type { IDryPowderService } from "../domain/interfaces/services/IDryPowderService.js";
+import type { IDryPowderRepository } from "../domain/interfaces/repositories/IDryPowderRepository.js";
 
 export class DryPowderService implements IDryPowderService {
   constructor(private dryPowderRepository: IDryPowderRepository) {}
 
-  getOneById(id: IdType): Promise<DryPowder> {
+  public getOneById(id: IdType): Promise<IDryPowder> {
     return this.dryPowderRepository.getOneById(id);
   }
 
-  getAll(): Promise<DryPowder[]> {
+  public getAll(): Promise<IDryPowder[]> {
     return this.dryPowderRepository.getAll();
   }
 
-  create(data: Prisma.DryPowderCreateInput): Promise<DryPowder> {
-    return this.dryPowderRepository.create(data);
+  public create(data: ICreateDryPowder): Promise<IDryPowder> {
+    DryPowder.validator.createValidator(data);
+
+    return this.dryPowderRepository.create({
+      ...data,
+      product: { connect: { id: data.productId } },
+    });
   }
 
-  updateOneById(
+  public updateOneById(
     id: IdType,
-    data: Prisma.DryPowderUpdateInput,
-  ): Promise<DryPowder> {
+    data: Partial<IDryPowder>,
+  ): Promise<IDryPowder> {
+    DryPowder.validator.updateValidator(data);
+
     return this.dryPowderRepository.updateOneById(id, data);
   }
 
-  deleteOneById(id: IdType): Promise<DryPowder> {
+  public deleteOneById(id: IdType): Promise<IDryPowder> {
     return this.dryPowderRepository.deleteOneById(id);
+  }
+
+  public toDomainModel(dryPowderDto: IDryPowder): DryPowder {
+    return new DryPowder(dryPowderDto);
   }
 }
