@@ -24,7 +24,7 @@ export class ConnectedVariationsTypeValidator extends BaseFieldsValidator {
     };
   }
 
-  public async checkComponentVariationHaveSimpleType(
+  private async checkComponentVariationHaveSimpleType(
     componentVariationId: IVariationSet["componentVariationId"] | undefined,
   ) {
     if (componentVariationId === undefined) {
@@ -43,7 +43,7 @@ export class ConnectedVariationsTypeValidator extends BaseFieldsValidator {
     return componentVariationId;
   }
 
-  public async checkParentVariationHaveSetType(
+  private async checkParentVariationHaveSetType(
     parentVariationId: IVariationSet["parentVariationId"] | undefined,
   ) {
     if (parentVariationId === undefined) {
