@@ -5,7 +5,7 @@ export const productVariationCreateSchema = {
   $id: "ProductVariationCreate",
   type: "object",
   $ref: "ProductVariationUpdate",
-  required: ["quantity", "productId", "variationType"],
+  required: ["productId", "variationType"],
 } as const satisfies JSONSchema;
 
 export type IProductVariationCreateSchema = RemoveIndex<

@@ -5,7 +5,7 @@ export const productVariationUpdateSchema = {
   $id: "ProductVariationUpdate",
   type: "object",
   properties: {
-    quantity: { type: "number" },
+    quantity: { type: "number", nullable: true },
     description: { type: "string", nullable: true },
     productId: idSchema,
     variationType: { type: "string", enum: ["SET", "SIMPLE"] },

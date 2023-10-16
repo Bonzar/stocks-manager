@@ -14,22 +14,34 @@ export class ProductVariationValidator
   public createValidator = (
     createData: OmitId<ICreateProductVariation>,
   ): OmitId<IProductVariation> => {
-    const variationType = this.variationTypeValidator(createData.variationType);
-    const variationVolumeId = this.variationVolumeIdValidator(
-      createData.variationVolumeId,
-    );
+    let validatedData: Partial<OmitId<IProductVariation>> = createData;
 
-    this.variationVolumeTypeConnectionValidator(
-      variationVolumeId,
-      variationType,
-    );
+    validatedData = {
+      ...validatedData,
+      ...this.variationTypeVolumeIdConnectionValidator(validatedData),
+    };
+
+    validatedData = {
+      ...validatedData,
+      ...this.variationTypeQuantityConnectionValidator(validatedData),
+    };
 
     return {
-      description: this.descriptionValidator(createData.description),
-      productId: this.productIdValidator(createData.productId),
-      quantity: this.quantityValidator(createData.quantity),
-      variationType,
-      variationVolumeId,
+      description: this.descriptionValidator(
+        validatedData.description ?? createData.description,
+      ),
+      productId: this.productIdValidator(
+        validatedData.productId ?? createData.productId,
+      ),
+      quantity: this.quantityValidator(
+        validatedData.quantity ?? createData.quantity,
+      ),
+      variationType: this.variationTypeValidator(
+        validatedData.variationType ?? createData.variationType,
+      ),
+      variationVolumeId: this.variationVolumeIdValidator(
+        validatedData.variationVolumeId ?? createData.variationVolumeId,
+      ),
     };
   };
 
@@ -40,23 +52,15 @@ export class ProductVariationValidator
     description,
     quantity,
   }: Partial<T>): Partial<T> {
-    const validatedData: Partial<T> = {};
+    let validatedData: Partial<T> = {};
 
-    if (variationVolumeId !== undefined || variationType !== undefined) {
-      if (variationVolumeId === undefined || variationType === undefined) {
-        throw new Error(
-          "When updating variationVolumeId OR variationType in ProductVariation its both should be present",
-        );
-      }
-
-      validatedData.variationType = this.variationTypeValidator(variationType);
+    if (variationVolumeId !== undefined) {
       validatedData.variationVolumeId =
         this.variationVolumeIdValidator(variationVolumeId);
+    }
 
-      this.variationVolumeTypeConnectionValidator(
-        validatedData.variationVolumeId,
-        validatedData.variationType,
-      );
+    if (variationType !== undefined) {
+      validatedData.variationType = this.variationTypeValidator(variationType);
     }
 
     if (description !== undefined) {
@@ -70,6 +74,16 @@ export class ProductVariationValidator
     if (quantity !== undefined) {
       validatedData.quantity = this.quantityValidator(quantity);
     }
+
+    validatedData = {
+      ...validatedData,
+      ...this.variationTypeVolumeIdConnectionValidator(validatedData),
+    };
+
+    validatedData = {
+      ...validatedData,
+      ...this.variationTypeQuantityConnectionValidator(validatedData),
+    };
 
     return validatedData;
   }
@@ -104,9 +118,7 @@ export class ProductVariationValidator
   }
 
   public quantityValidator(quantity: ProductVariation["quantity"] | undefined) {
-    this.assertsDefined(quantity, "ProductVariation quantity cannot be empty");
-
-    return quantity;
+    return this.getValueOrDefault(quantity, null);
   }
 
   public variationTypeValidator(
@@ -120,22 +132,105 @@ export class ProductVariationValidator
     return variationType;
   }
 
-  private variationVolumeTypeConnectionValidator(
-    variationVolumeId: ProductVariation["variationVolumeId"],
-    variationType: ProductVariation["variationType"],
-  ) {
-    switch (variationType) {
-      case "SIMPLE":
-        break;
-      case "SET":
-        if (variationVolumeId !== null) {
+  private variationTypeVolumeIdConnectionValidator<
+    T extends {
+      variationType?: ProductVariation["variationType"];
+      variationVolumeId?: ProductVariation["variationVolumeId"];
+    },
+  >({
+    variationType,
+    variationVolumeId,
+  }: T): {
+    variationType: T["variationType"];
+    variationVolumeId: T["variationVolumeId"];
+  } {
+    if (variationType === undefined && variationVolumeId === undefined) {
+      return { variationType, variationVolumeId };
+    }
+
+    const variationVolumeIdValue = this.getValueOrDefault(
+      variationVolumeId,
+      null,
+    );
+
+    if (variationVolumeIdValue === null) {
+      // variationId == null -> we can leave variationType as is
+
+      return { variationType, variationVolumeId: variationVolumeIdValue };
+    } else {
+      // variationId exist -> we should know the type to check
+
+      switch (variationType) {
+        case "SIMPLE": {
+          return { variationType, variationVolumeId: variationVolumeIdValue };
+        }
+        case "SET": {
           throw new Error(
-            "ProductVariation when variationType == SET, variationVolumeId should be Null",
+            "In ProductVariation when variationType == SET, variationVolumeId should be Null",
           );
         }
-        break;
+        case undefined: {
+          throw new Error(
+            "For update `variationVolumeId` in ProductVariation, `variationType` should be specified",
+          );
+        }
+        default: {
+          exhaustiveCheck(variationType);
+          throw new Error(
+            "For update `variationVolumeId` in ProductVariation, `variationType` should be specified",
+          );
+        }
+      }
+    }
+  }
+
+  private variationTypeQuantityConnectionValidator<
+    T extends {
+      variationType?: ProductVariation["variationType"];
+      quantity?: ProductVariation["quantity"];
+    },
+  >({
+    variationType,
+    quantity,
+  }: T): {
+    variationType: T["variationType"];
+    quantity: T["quantity"];
+  } {
+    if (variationType === undefined && quantity === undefined) {
+      return { variationType, quantity };
+    }
+
+    const quantityValue = this.getValueOrDefault(quantity, null);
+
+    switch (variationType) {
+      case "SIMPLE": {
+        if (quantityValue === null) {
+          throw new Error(
+            "In ProductVariation when variationType == SIMPLE, quantity should be Number",
+          );
+        }
+
+        return { variationType, quantity: quantityValue };
+      }
+      case "SET": {
+        if (quantityValue !== null) {
+          throw new Error(
+            "In ProductVariation when variationType == SET, quantity should be Null",
+          );
+        }
+
+        return { variationType, quantity: quantityValue };
+      }
+      case undefined: {
+        throw new Error(
+          "For update `quantity` in ProductVariation, `variationType` should be specified",
+        );
+      }
       default: {
         exhaustiveCheck(variationType);
+        throw new Error(
+          "For update `quantity` in ProductVariation, `variationType` should be specified",
+        );
       }
     }
   }
