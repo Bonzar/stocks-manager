@@ -3,6 +3,11 @@ import { IVariationTypeQuantityConnectionValidatorData } from "../../../../domai
 import { exhaustiveCheck } from "../../../../utils/exhaustiveCheck.js";
 
 export class VariationTypeQuantityConnectionValidator extends BaseFieldsValidator {
+  constructor() {
+    super();
+    this.validator = this.validator.bind(this);
+  }
+
   public validator({
     variationType,
     quantity,
