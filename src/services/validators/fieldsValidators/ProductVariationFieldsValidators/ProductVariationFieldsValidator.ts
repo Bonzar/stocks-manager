@@ -1,7 +1,7 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
 import { VariationTypeVolumeIdConnectionValidator } from "./VariationTypeVolumeIdConnectionValidator.js";
-import { IProductVariationFieldsValidator } from "../../../../interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
-import { ProductVariation } from "../../../ProductVariation.js";
+import { IProductVariationFieldsValidator } from "../../../../domain/interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
+import { ProductVariation } from "../../../../domain/models/ProductVariation.js";
 import { VariationTypeQuantityConnectionValidator } from "./VariationTypeQuantityConnectionValidator.js";
 
 export class ProductVariationFieldsValidator

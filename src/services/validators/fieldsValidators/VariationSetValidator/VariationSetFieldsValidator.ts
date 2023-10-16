@@ -1,11 +1,29 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
-import { IVariationSetFieldsValidator } from "../../../../interfaces/validators/fieldsValidators/IVariationSetFieldsValidator.js";
-import { IVariationSet } from "../../../VariationSet.js";
+import {
+  IVariationSetFieldsValidator,
+  IVariationSetVariationsTypeValidatorData,
+} from "../../../../domain/interfaces/validators/fieldsValidators/IVariationSetFieldsValidator.js";
+import { IVariationSet } from "../../../../domain/models/VariationSet.js";
+import { ConnectedVariationsTypeValidator } from "./ConnectedVariationsTypeValidator.js";
+import { IProductVariationRepository } from "../../../../domain/interfaces/repositories/IProductVariationRepository.js";
 
 export class VariationSetFieldsValidator
   extends BaseFieldsValidator
   implements IVariationSetFieldsValidator
 {
+  public connectedVariationsTypeValidator: (
+    data: IVariationSetVariationsTypeValidatorData,
+  ) => Promise<IVariationSetVariationsTypeValidatorData>;
+
+  constructor(productVariationRepository: IProductVariationRepository) {
+    super();
+
+    this.connectedVariationsTypeValidator =
+      new ConnectedVariationsTypeValidator(
+        productVariationRepository,
+      ).validator;
+  }
+
   parentVariationIdValidator(
     parentVariationId: IVariationSet["parentVariationId"] | undefined,
   ) {

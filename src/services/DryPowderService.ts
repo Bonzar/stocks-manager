@@ -6,7 +6,7 @@ import { DryPowder } from "../domain/models/DryPowder.js";
 import type { IDryPowderService } from "../domain/interfaces/services/IDryPowderService.js";
 import type { IDryPowderRepository } from "../domain/interfaces/repositories/IDryPowderRepository.js";
 import { IDryPowderValidator } from "../domain/interfaces/validators/modelsValidators/IDryPowderValidator.js";
-import { DryPowderValidator } from "../domain/models/validators/modelValidators/DryPowderValidator.js";
+import { DryPowderValidator } from "./validators/modelValidators/DryPowderValidator.js";
 
 export class DryPowderService implements IDryPowderService {
   constructor(
@@ -22,8 +22,8 @@ export class DryPowderService implements IDryPowderService {
     return this.dryPowderRepository.getAll();
   }
 
-  public create(data: ICreateDryPowder): Promise<IDryPowder> {
-    const validatedData = this.dryPowderValidator.createValidator(data);
+  public async create(data: ICreateDryPowder): Promise<IDryPowder> {
+    const validatedData = await this.dryPowderValidator.createValidator(data);
 
     const { productId, ...otherData } = validatedData;
 
@@ -33,11 +33,11 @@ export class DryPowderService implements IDryPowderService {
     });
   }
 
-  public updateOneById(
+  public async updateOneById(
     id: IdType,
     data: Partial<IDryPowder>,
   ): Promise<IDryPowder> {
-    const validatedData = this.dryPowderValidator.updateValidator(data);
+    const validatedData = await this.dryPowderValidator.updateValidator(data);
 
     return this.dryPowderRepository.updateOneById(id, validatedData);
   }
@@ -46,7 +46,12 @@ export class DryPowderService implements IDryPowderService {
     return this.dryPowderRepository.deleteOneById(id);
   }
 
-  public toDomainModel(dryPowderDto: IDryPowder): DryPowder {
-    return new DryPowder(dryPowderDto);
+  public async toDomainModel(dryPowderDto: IDryPowder): Promise<DryPowder> {
+    const id = this.dryPowderValidator.idValidator(dryPowderDto.id);
+
+    const validatedData =
+      await this.dryPowderValidator.createValidator(dryPowderDto);
+
+    return new DryPowder({ ...validatedData, id });
   }
 }

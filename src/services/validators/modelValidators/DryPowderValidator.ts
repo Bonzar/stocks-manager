@@ -1,8 +1,11 @@
-import { ICreateDryPowder, IDryPowder } from "../../DryPowder.js";
 import { BaseFieldsValidator } from "../fieldsValidators/base/BaseFieldsValidator.js";
-import { IDryPowderValidator } from "../../../interfaces/validators/modelsValidators/IDryPowderValidator.js";
-import { IDryPowderFieldsValidator } from "../../../interfaces/validators/fieldsValidators/IDryPowderFieldsValidator.js";
+import { IDryPowderValidator } from "../../../domain/interfaces/validators/modelsValidators/IDryPowderValidator.js";
+import { IDryPowderFieldsValidator } from "../../../domain/interfaces/validators/fieldsValidators/IDryPowderFieldsValidator.js";
 import { DryPowderFieldsValidator } from "../fieldsValidators/DryPowderFieldsValidators/DryPowderFieldsValidator.js";
+import {
+  ICreateDryPowder,
+  IDryPowder,
+} from "../../../domain/models/DryPowder.js";
 
 export class DryPowderValidator
   extends BaseFieldsValidator
@@ -11,11 +14,11 @@ export class DryPowderValidator
   private fieldsValidator: IDryPowderFieldsValidator =
     new DryPowderFieldsValidator();
 
-  public createValidator({
+  public async createValidator({
     code,
     quantity,
     productId,
-  }: OmitId<ICreateDryPowder>): OmitId<IDryPowder> {
+  }: OmitId<ICreateDryPowder>): Promise<OmitId<IDryPowder>> {
     return {
       code: this.fieldsValidator.codeValidator(code),
       quantity: this.fieldsValidator.quantityValidator(quantity),
@@ -23,11 +26,11 @@ export class DryPowderValidator
     };
   }
 
-  public updateValidator<T extends OmitId<IDryPowder>>({
+  public async updateValidator<T extends OmitId<IDryPowder>>({
     code,
     quantity,
     productId,
-  }: Partial<T>): Partial<T> {
+  }: Partial<T>): Promise<Partial<T>> {
     const validationData: Partial<T> = {};
 
     if (code !== undefined) {

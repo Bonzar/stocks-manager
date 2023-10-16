@@ -1,18 +1,16 @@
+import { IProductVariationValidator } from "../../../domain/interfaces/validators/modelsValidators/IProductVariationValidator.js";
+import { IProductVariationFieldsValidator } from "../../../domain/interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
+import { ProductVariationFieldsValidator } from "../fieldsValidators/ProductVariationFieldsValidators/ProductVariationFieldsValidator.js";
 import {
   ICreateProductVariation,
   IProductVariation,
-} from "../../ProductVariation.js";
-import { IProductVariationValidator } from "../../../interfaces/validators/modelsValidators/IProductVariationValidator.js";
-import { ProductVariationFieldsValidator } from "../fieldsValidators/ProductVariationFieldsValidators/ProductVariationFieldsValidator.js";
-import { IProductVariationFieldsValidator } from "../../../interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
+} from "../../../domain/models/ProductVariation.js";
 
 export class ProductVariationValidator implements IProductVariationValidator {
   private fieldsValidator: IProductVariationFieldsValidator =
     new ProductVariationFieldsValidator();
 
-  public createValidator = (
-    createData: OmitId<ICreateProductVariation>,
-  ): OmitId<IProductVariation> => {
+  public async createValidator(createData: OmitId<ICreateProductVariation>) {
     let validatedData: Partial<OmitId<IProductVariation>> = createData;
 
     validatedData = {
@@ -46,15 +44,15 @@ export class ProductVariationValidator implements IProductVariationValidator {
         validatedData.variationVolumeId ?? createData.variationVolumeId,
       ),
     };
-  };
+  }
 
-  public updateValidator<T extends OmitId<IProductVariation>>({
+  public async updateValidator<T extends OmitId<IProductVariation>>({
     productId,
     variationType,
     variationVolumeId,
     description,
     quantity,
-  }: Partial<T>): Partial<T> {
+  }: Partial<T>): Promise<Partial<T>> {
     let validatedData: Partial<T> = {};
 
     if (variationVolumeId !== undefined) {

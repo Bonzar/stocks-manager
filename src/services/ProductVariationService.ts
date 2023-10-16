@@ -6,7 +6,7 @@ import {
 import type { IProductVariationService } from "../domain/interfaces/services/IProductVariationService.js";
 import type { IProductVariationRepository } from "../domain/interfaces/repositories/IProductVariationRepository.js";
 import { IProductVariationValidator } from "../domain/interfaces/validators/modelsValidators/IProductVariationValidator.js";
-import { ProductVariationValidator } from "../domain/models/validators/modelValidators/ProductVariationValidator.js";
+import { ProductVariationValidator } from "./validators/modelValidators/ProductVariationValidator.js";
 
 export class ProductVariationService implements IProductVariationService {
   constructor(
@@ -22,8 +22,11 @@ export class ProductVariationService implements IProductVariationService {
     return this.productVariationRepository.getOneById(id);
   }
 
-  public create(data: ICreateProductVariation): Promise<IProductVariation> {
-    const validatedData = this.productVariationValidator.createValidator(data);
+  public async create(
+    data: ICreateProductVariation,
+  ): Promise<IProductVariation> {
+    const validatedData =
+      await this.productVariationValidator.createValidator(data);
 
     const { productId, variationVolumeId, ...otherData } = validatedData;
 
@@ -38,11 +41,12 @@ export class ProductVariationService implements IProductVariationService {
     });
   }
 
-  public updateOneById(
+  public async updateOneById(
     id: IdType,
     data: Partial<IProductVariation>,
   ): Promise<IProductVariation> {
-    const validatedData = this.productVariationValidator.updateValidator(data);
+    const validatedData =
+      await this.productVariationValidator.updateValidator(data);
 
     return this.productVariationRepository.updateOneById(id, validatedData);
   }
@@ -51,9 +55,16 @@ export class ProductVariationService implements IProductVariationService {
     return this.productVariationRepository.deleteOneById(id);
   }
 
-  public toDomainModel(
+  public async toDomainModel(
     productVariationDto: IProductVariation,
-  ): ProductVariation {
-    return new ProductVariation(productVariationDto);
+  ): Promise<ProductVariation> {
+    const id = this.productVariationValidator.idValidator(
+      productVariationDto.id,
+    );
+
+    const validatedData =
+      await this.productVariationValidator.createValidator(productVariationDto);
+
+    return new ProductVariation({ ...validatedData, id });
   }
 }

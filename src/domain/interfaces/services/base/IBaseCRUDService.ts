@@ -13,5 +13,5 @@ export interface IBaseCRUDService<
 
   deleteOneById(id: IdType): Promise<ModelType>;
 
-  toDomainModel(dto: ModelType): Model;
+  toDomainModel(dto: ModelType): Promise<Model>;
 }

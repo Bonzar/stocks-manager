@@ -1,6 +1,6 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
-import { exhaustiveCheck } from "../../../../../utils/exhaustiveCheck.js";
-import { IVariationTypeVolumeIdConnectionValidatorData } from "../../../../interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
+import { IVariationTypeVolumeIdConnectionValidatorData } from "../../../../domain/interfaces/validators/fieldsValidators/IProductVariationFieldsValidator.js";
+import { exhaustiveCheck } from "../../../../utils/exhaustiveCheck.js";
 
 export class VariationTypeVolumeIdConnectionValidator extends BaseFieldsValidator {
   public validator({

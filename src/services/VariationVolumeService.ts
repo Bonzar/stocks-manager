@@ -6,7 +6,7 @@ import {
 import type { IVariationVolumeService } from "../domain/interfaces/services/IVariationVolumeService.js";
 import type { IVariationVolumeRepository } from "../domain/interfaces/repositories/IVariationVolumeRepository.js";
 import { IVariationVolumeValidator } from "../domain/interfaces/validators/modelsValidators/IVariationVolumeValidator.js";
-import { VariationVolumeValidator } from "../domain/models/validators/modelValidators/VariationVolumeValidator.js";
+import { VariationVolumeValidator } from "./validators/modelValidators/VariationVolumeValidator.js";
 
 export class VariationVolumeService implements IVariationVolumeService {
   constructor(
@@ -22,17 +22,19 @@ export class VariationVolumeService implements IVariationVolumeService {
     return this.variationVolumeRepository.getOneById(id);
   }
 
-  create(data: ICreateVariationVolume): Promise<IVariationVolume> {
-    const validatedData = this.variationVolumeValidator.createValidator(data);
+  async create(data: ICreateVariationVolume): Promise<IVariationVolume> {
+    const validatedData =
+      await this.variationVolumeValidator.createValidator(data);
 
     return this.variationVolumeRepository.create(validatedData);
   }
 
-  updateOneById(
+  async updateOneById(
     id: IdType,
     data: Partial<IVariationVolume>,
   ): Promise<IVariationVolume> {
-    const validatedData = this.variationVolumeValidator.updateValidator(data);
+    const validatedData =
+      await this.variationVolumeValidator.updateValidator(data);
 
     return this.variationVolumeRepository.updateOneById(id, validatedData);
   }
@@ -41,7 +43,14 @@ export class VariationVolumeService implements IVariationVolumeService {
     return this.variationVolumeRepository.deleteOneById(id);
   }
 
-  toDomainModel(variationVolumeDto: IVariationVolume): VariationVolume {
-    return new VariationVolume(variationVolumeDto);
+  async toDomainModel(
+    variationVolumeDto: IVariationVolume,
+  ): Promise<VariationVolume> {
+    const id = this.variationVolumeValidator.idValidator(variationVolumeDto.id);
+
+    const validatedData =
+      await this.variationVolumeValidator.createValidator(variationVolumeDto);
+
+    return new VariationVolume({ ...validatedData, id });
   }
 }

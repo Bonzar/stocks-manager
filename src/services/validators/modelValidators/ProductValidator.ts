@@ -1,21 +1,23 @@
-import { ICreateProduct, IProduct } from "../../Product.js";
-import { IProductValidator } from "../../../interfaces/validators/modelsValidators/IProductValidator.js";
-import { IProductFieldsValidator } from "../../../interfaces/validators/fieldsValidators/IProductFieldsValidator.js";
+import { IProductValidator } from "../../../domain/interfaces/validators/modelsValidators/IProductValidator.js";
+import { IProductFieldsValidator } from "../../../domain/interfaces/validators/fieldsValidators/IProductFieldsValidator.js";
 import { ProductFieldsValidator } from "../fieldsValidators/ProductFieldsValidators/ProductFieldsValidator.js";
+import { ICreateProduct, IProduct } from "../../../domain/models/Product.js";
 
 export class ProductValidator implements IProductValidator {
   private fieldsValidator: IProductFieldsValidator =
     new ProductFieldsValidator();
 
-  public createValidator({ name }: OmitId<ICreateProduct>): OmitId<IProduct> {
+  public async createValidator({
+    name,
+  }: OmitId<ICreateProduct>): Promise<OmitId<IProduct>> {
     return {
       name: this.fieldsValidator.nameValidator(name),
     };
   }
 
-  public updateValidator<T extends OmitId<IProduct>>({
+  public async updateValidator<T extends OmitId<IProduct>>({
     name,
-  }: Partial<T>): Partial<T> {
+  }: Partial<T>): Promise<Partial<T>> {
     const validatedData: Partial<T> = {};
 
     if (name !== undefined) {

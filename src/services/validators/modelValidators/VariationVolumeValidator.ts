@@ -1,21 +1,23 @@
-import { IVariationVolumeFieldsValidator } from "../../../interfaces/validators/fieldsValidators/IVariationVolumeFieldsValidator.js";
-import { IVariationVolumeValidator } from "../../../interfaces/validators/modelsValidators/IVariationVolumeValidator.js";
+import { IVariationVolumeFieldsValidator } from "../../../domain/interfaces/validators/fieldsValidators/IVariationVolumeFieldsValidator.js";
+import { IVariationVolumeValidator } from "../../../domain/interfaces/validators/modelsValidators/IVariationVolumeValidator.js";
 import { VariationVolumeFieldsValidator } from "../fieldsValidators/VariationVolumeFieldsValidators/VariationVolumeFieldsValidator.js";
 import {
   ICreateVariationVolume,
   IVariationVolume,
-} from "../../VariationVolume.js";
+} from "../../../domain/models/VariationVolume.js";
 
 export class VariationVolumeValidator implements IVariationVolumeValidator {
   private fieldsValidator: IVariationVolumeFieldsValidator =
     new VariationVolumeFieldsValidator();
 
-  public createValidator({
+  public async createValidator({
     dryCoefficient,
     name,
     priority,
     minCount,
-  }: Omit<ICreateVariationVolume, "id">): Omit<IVariationVolume, "id"> {
+  }: Omit<ICreateVariationVolume, "id">): Promise<
+    Omit<IVariationVolume, "id">
+  > {
     return {
       name: this.fieldsValidator.nameValidator(name),
       dryCoefficient:
@@ -25,12 +27,12 @@ export class VariationVolumeValidator implements IVariationVolumeValidator {
     };
   }
 
-  public updateValidator<T extends Omit<IVariationVolume, "id">>({
+  public async updateValidator<T extends Omit<IVariationVolume, "id">>({
     name,
     dryCoefficient,
     priority,
     minCount,
-  }: Partial<T>): Partial<T> {
+  }: Partial<T>): Promise<Partial<T>> {
     const validatedData: Partial<T> = {};
 
     if (name !== undefined) {

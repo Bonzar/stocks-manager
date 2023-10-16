@@ -14,13 +14,16 @@ export type IVariationTypeQuantityConnectionValidatorData = {
   quantity?: ProductVariation["quantity"];
 };
 
-export type IProductVariationFieldsValidator =
-  IBaseFieldsValidator<IProductVariation> & {
-    variationTypeVolumeIdConnectionValidator(
-      data: IVariationTypeVolumeIdConnectionValidatorData,
-    ): IVariationTypeVolumeIdConnectionValidatorData;
+interface IProductVariationAdditionalValidators {
+  variationTypeVolumeIdConnectionValidator(
+    data: IVariationTypeVolumeIdConnectionValidatorData,
+  ): IVariationTypeVolumeIdConnectionValidatorData;
 
-    variationTypeQuantityConnectionValidator(
-      data: IVariationTypeQuantityConnectionValidatorData,
-    ): IVariationTypeQuantityConnectionValidatorData;
-  };
+  variationTypeQuantityConnectionValidator(
+    data: IVariationTypeQuantityConnectionValidatorData,
+  ): IVariationTypeQuantityConnectionValidatorData;
+}
+
+export type IProductVariationFieldsValidator =
+  IBaseFieldsValidator<IProductVariation> &
+    IProductVariationAdditionalValidators;

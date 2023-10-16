@@ -1,6 +1,6 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
-import { IVariationVolumeFieldsValidator } from "../../../../interfaces/validators/fieldsValidators/IVariationVolumeFieldsValidator.js";
-import { IVariationVolume } from "../../../VariationVolume.js";
+import { IVariationVolumeFieldsValidator } from "../../../../domain/interfaces/validators/fieldsValidators/IVariationVolumeFieldsValidator.js";
+import { IVariationVolume } from "../../../../domain/models/VariationVolume.js";
 
 export class VariationVolumeFieldsValidator
   extends BaseFieldsValidator

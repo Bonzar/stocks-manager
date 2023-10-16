@@ -6,14 +6,19 @@ import {
 } from "../domain/models/VariationSet.js";
 import { IVariationSetRepository } from "../domain/interfaces/repositories/IVariationSetRepository.js";
 import { IVariationSetValidator } from "../domain/interfaces/validators/modelsValidators/IVariationSetValidator.js";
-import { VariationSetValidator } from "../domain/models/validators/modelValidators/VariationSetValidator.js";
 import { Prisma } from "@prisma/client";
 
 export class VariationSetService implements IVariationSetService {
+  private variationSetRepository: IVariationSetRepository;
+  private variationSetValidator: IVariationSetValidator;
+
   constructor(
-    private variationSetRepository: IVariationSetRepository,
-    private variationSetValidator: IVariationSetValidator = new VariationSetValidator(),
-  ) {}
+    variationSetRepository: IVariationSetRepository,
+    variationSetValidator: IVariationSetValidator,
+  ) {
+    this.variationSetRepository = variationSetRepository;
+    this.variationSetValidator = variationSetValidator;
+  }
 
   getOneById(id: IdType): Promise<IVariationSet> {
     return this.variationSetRepository.getOneById(id);
@@ -23,8 +28,9 @@ export class VariationSetService implements IVariationSetService {
     return this.variationSetRepository.getAll();
   }
 
-  create(data: ICreateVariationSet): Promise<IVariationSet> {
-    const validatedData = this.variationSetValidator.createValidator(data);
+  async create(data: ICreateVariationSet): Promise<IVariationSet> {
+    const validatedData =
+      await this.variationSetValidator.createValidator(data);
 
     return this.variationSetRepository.create({
       componentVariation: {
@@ -36,16 +42,23 @@ export class VariationSetService implements IVariationSetService {
     });
   }
 
-  updateOneById(
+  async updateOneById(
     id: IdType,
     data: Partial<IVariationSet>,
   ): Promise<IVariationSet> {
     const { parentVariationId, componentVariationId } =
-      this.variationSetValidator.updateValidator(data);
+      await this.variationSetValidator.updateValidator(data);
 
     const updateData: Prisma.VariationSetUpdateInput = {
-      parentVariation: { connect: { id: parentVariationId } },
-      componentVariation: { connect: { id: componentVariationId } },
+      parentVariation:
+        parentVariationId === undefined
+          ? undefined
+          : { connect: { id: parentVariationId } },
+
+      componentVariation:
+        componentVariationId === undefined
+          ? undefined
+          : { connect: { id: componentVariationId } },
     };
 
     return this.variationSetRepository.updateOneById(id, updateData);
@@ -55,7 +68,12 @@ export class VariationSetService implements IVariationSetService {
     return this.variationSetRepository.deleteOneById(id);
   }
 
-  toDomainModel(variationSetDto: IVariationSet): VariationSet {
-    return new VariationSet(variationSetDto);
+  async toDomainModel(variationSetDto: IVariationSet): Promise<VariationSet> {
+    const id = this.variationSetValidator.idValidator(variationSetDto.id);
+
+    const validatedData =
+      await this.variationSetValidator.createValidator(variationSetDto);
+
+    return new VariationSet({ ...validatedData, id });
   }
 }

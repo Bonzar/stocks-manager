@@ -1,6 +1,6 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
-import { IProductFieldsValidator } from "../../../../interfaces/validators/fieldsValidators/IProductFieldsValidator.js";
-import { IProduct } from "../../../Product.js";
+import { IProductFieldsValidator } from "../../../../domain/interfaces/validators/fieldsValidators/IProductFieldsValidator.js";
+import { IProduct } from "../../../../domain/models/Product.js";
 
 export class ProductFieldsValidator
   extends BaseFieldsValidator

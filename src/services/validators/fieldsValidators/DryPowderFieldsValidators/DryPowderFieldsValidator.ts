@@ -1,6 +1,6 @@
 import { BaseFieldsValidator } from "../base/BaseFieldsValidator.js";
-import { IDryPowderFieldsValidator } from "../../../../interfaces/validators/fieldsValidators/IDryPowderFieldsValidator.js";
-import { IDryPowder } from "../../../DryPowder.js";
+import { IDryPowderFieldsValidator } from "../../../../domain/interfaces/validators/fieldsValidators/IDryPowderFieldsValidator.js";
+import { IDryPowder } from "../../../../domain/models/DryPowder.js";
 
 export class DryPowderFieldsValidator
   extends BaseFieldsValidator

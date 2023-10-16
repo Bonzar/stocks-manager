@@ -2,8 +2,8 @@ import type { IProductService } from "../domain/interfaces/services/IProductServ
 import type { IProductRepository } from "../domain/interfaces/repositories/IProductRepository.js";
 import type { ICreateProduct, IProduct } from "../domain/models/Product.js";
 import { Product } from "../domain/models/Product.js";
-import { ProductValidator } from "../domain/models/validators/modelValidators/ProductValidator.js";
 import { IProductValidator } from "../domain/interfaces/validators/modelsValidators/IProductValidator.js";
+import { ProductValidator } from "./validators/modelValidators/ProductValidator.js";
 
 export class ProductService implements IProductService {
   constructor(
@@ -19,14 +19,17 @@ export class ProductService implements IProductService {
     return this.productRepository.getOneById(id);
   }
 
-  public create(data: ICreateProduct): Promise<IProduct> {
-    const validatedData = this.productValidator.createValidator(data);
+  public async create(data: ICreateProduct): Promise<IProduct> {
+    const validatedData = await this.productValidator.createValidator(data);
 
     return this.productRepository.create(validatedData);
   }
 
-  public updateOneById(id: IdType, data: Partial<IProduct>): Promise<IProduct> {
-    const validatedData = this.productValidator.updateValidator(data);
+  public async updateOneById(
+    id: IdType,
+    data: Partial<IProduct>,
+  ): Promise<IProduct> {
+    const validatedData = await this.productValidator.updateValidator(data);
 
     return this.productRepository.updateOneById(id, validatedData);
   }
@@ -35,7 +38,12 @@ export class ProductService implements IProductService {
     return this.productRepository.deleteOneById(id);
   }
 
-  public toDomainModel(productDto: IProduct): Product {
-    return new Product(productDto);
+  public async toDomainModel(productDto: IProduct): Promise<Product> {
+    const id = this.productValidator.idValidator(productDto.id);
+
+    const validatedData =
+      await this.productValidator.createValidator(productDto);
+
+    return new Product({ ...validatedData, id });
   }
 }
