@@ -23,18 +23,18 @@ export class VariationVolumeService implements IVariationVolumeService {
   }
 
   create(data: ICreateVariationVolume): Promise<IVariationVolume> {
-    this.variationVolumeValidator.createValidator(data);
+    const validatedData = this.variationVolumeValidator.createValidator(data);
 
-    return this.variationVolumeRepository.create(data);
+    return this.variationVolumeRepository.create(validatedData);
   }
 
   updateOneById(
     id: IdType,
     data: Partial<IVariationVolume>,
   ): Promise<IVariationVolume> {
-    this.variationVolumeValidator.updateValidator(data);
+    const validatedData = this.variationVolumeValidator.updateValidator(data);
 
-    return this.variationVolumeRepository.updateOneById(id, data);
+    return this.variationVolumeRepository.updateOneById(id, validatedData);
   }
 
   deleteOneById(id: IdType): Promise<IVariationVolume> {

@@ -19,15 +19,15 @@ export class ProductService implements IProductService {
   }
 
   public create(data: ICreateProduct): Promise<IProduct> {
-    this.productValidator.createValidator(data);
+    const validatedData = this.productValidator.createValidator(data);
 
-    return this.productRepository.create(data);
+    return this.productRepository.create(validatedData);
   }
 
   public updateOneById(id: IdType, data: Partial<IProduct>): Promise<IProduct> {
-    this.productValidator.updateValidator(data);
+    const validatedData = this.productValidator.updateValidator(data);
 
-    return this.productRepository.updateOneById(id, data);
+    return this.productRepository.updateOneById(id, validatedData);
   }
 
   public deleteOneById(id: IdType): Promise<IProduct> {

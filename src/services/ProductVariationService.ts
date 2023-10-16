@@ -23,17 +23,18 @@ export class ProductVariationService implements IProductVariationService {
   }
 
   public create(data: ICreateProductVariation): Promise<IProductVariation> {
-    this.productVariationValidator.createValidator(data);
+    const validatedData = this.productVariationValidator.createValidator(data);
 
-    const { productId, variationVolumeId, ...otherData } = data;
+    const { productId, variationVolumeId, ...otherData } = validatedData;
 
     return this.productVariationRepository.create({
       ...otherData,
-      product: { connect: { id: data.productId } },
+      product: { connect: { id: validatedData.productId } },
       variationVolume:
-        data.variationVolumeId === undefined || data.variationVolumeId === null
+        validatedData.variationVolumeId === undefined ||
+        validatedData.variationVolumeId === null
           ? undefined
-          : { connect: { id: data.variationVolumeId } },
+          : { connect: { id: validatedData.variationVolumeId } },
     });
   }
 
@@ -41,9 +42,9 @@ export class ProductVariationService implements IProductVariationService {
     id: IdType,
     data: Partial<IProductVariation>,
   ): Promise<IProductVariation> {
-    this.productVariationValidator.updateValidator(data);
+    const validatedData = this.productVariationValidator.updateValidator(data);
 
-    return this.productVariationRepository.updateOneById(id, data);
+    return this.productVariationRepository.updateOneById(id, validatedData);
   }
 
   public deleteOneById(id: IdType): Promise<IProductVariation> {

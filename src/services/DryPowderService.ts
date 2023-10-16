@@ -23,13 +23,13 @@ export class DryPowderService implements IDryPowderService {
   }
 
   public create(data: ICreateDryPowder): Promise<IDryPowder> {
-    this.dryPowderValidator.createValidator(data);
+    const validatedData = this.dryPowderValidator.createValidator(data);
 
-    const { productId, ...otherData } = data;
+    const { productId, ...otherData } = validatedData;
 
     return this.dryPowderRepository.create({
       ...otherData,
-      product: { connect: { id: data.productId } },
+      product: { connect: { id: validatedData.productId } },
     });
   }
 
@@ -37,9 +37,9 @@ export class DryPowderService implements IDryPowderService {
     id: IdType,
     data: Partial<IDryPowder>,
   ): Promise<IDryPowder> {
-    this.dryPowderValidator.updateValidator(data);
+    const validatedData = this.dryPowderValidator.updateValidator(data);
 
-    return this.dryPowderRepository.updateOneById(id, data);
+    return this.dryPowderRepository.updateOneById(id, validatedData);
   }
 
   public deleteOneById(id: IdType): Promise<IDryPowder> {
