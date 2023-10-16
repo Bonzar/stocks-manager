@@ -1,5 +1,7 @@
-type FieldsValidators<T> = {
-  [K in keyof T as `${K & string}Validator`]: (arg: T[K] | undefined) => T[K];
+export type FieldsValidators<ModelType> = {
+  [K in keyof ModelType as `${K & string}Validator`]: (
+    arg: ModelType[K] | undefined,
+  ) => ModelType[K];
 };
 
 export type IValidator<

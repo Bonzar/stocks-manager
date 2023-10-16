@@ -2,7 +2,7 @@ import type {
   ICreateVariationVolume,
   IVariationVolume,
 } from "../VariationVolume.js";
-import { BaseValidator } from "./BaseValidator.js";
+import { BaseValidator } from "./base/BaseValidator.js";
 import type { IVariationVolumeValidator } from "../../interfaces/validators/IVariationVolumeValidator.js";
 
 export class VariationVolumeValidator

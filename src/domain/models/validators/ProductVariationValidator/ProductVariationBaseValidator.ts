@@ -1,93 +1,12 @@
-import {
-  ICreateProductVariation,
-  IProductVariation,
-  ProductVariation,
-} from "../ProductVariation.js";
-import { exhaustiveCheck } from "../../../utils/exhaustiveCheck.js";
-import { BaseValidator } from "./BaseValidator.js";
-import { IProductVariationValidator } from "../../interfaces/validators/IProductVariationValidator.js";
+import { BaseValidator } from "../base/BaseValidator.js";
+import { FieldsValidators } from "../../../interfaces/validators/IValidator.js";
+import { IProductVariation, ProductVariation } from "../../ProductVariation.js";
+import { exhaustiveCheck } from "../../../../utils/exhaustiveCheck.js";
 
-export class ProductVariationValidator
+export class ProductVariationBaseValidator
   extends BaseValidator
-  implements IProductVariationValidator
+  implements FieldsValidators<IProductVariation>
 {
-  public createValidator = (
-    createData: OmitId<ICreateProductVariation>,
-  ): OmitId<IProductVariation> => {
-    let validatedData: Partial<OmitId<IProductVariation>> = createData;
-
-    validatedData = {
-      ...validatedData,
-      ...this.variationTypeVolumeIdConnectionValidator(validatedData),
-    };
-
-    validatedData = {
-      ...validatedData,
-      ...this.variationTypeQuantityConnectionValidator(validatedData),
-    };
-
-    return {
-      description: this.descriptionValidator(
-        validatedData.description ?? createData.description,
-      ),
-      productId: this.productIdValidator(
-        validatedData.productId ?? createData.productId,
-      ),
-      quantity: this.quantityValidator(
-        validatedData.quantity ?? createData.quantity,
-      ),
-      variationType: this.variationTypeValidator(
-        validatedData.variationType ?? createData.variationType,
-      ),
-      variationVolumeId: this.variationVolumeIdValidator(
-        validatedData.variationVolumeId ?? createData.variationVolumeId,
-      ),
-    };
-  };
-
-  public updateValidator<T extends OmitId<IProductVariation>>({
-    productId,
-    variationType,
-    variationVolumeId,
-    description,
-    quantity,
-  }: Partial<T>): Partial<T> {
-    let validatedData: Partial<T> = {};
-
-    if (variationVolumeId !== undefined) {
-      validatedData.variationVolumeId =
-        this.variationVolumeIdValidator(variationVolumeId);
-    }
-
-    if (variationType !== undefined) {
-      validatedData.variationType = this.variationTypeValidator(variationType);
-    }
-
-    if (description !== undefined) {
-      validatedData.description = this.descriptionValidator(description);
-    }
-
-    if (productId !== undefined) {
-      validatedData.productId = this.productIdValidator(productId);
-    }
-
-    if (quantity !== undefined) {
-      validatedData.quantity = this.quantityValidator(quantity);
-    }
-
-    validatedData = {
-      ...validatedData,
-      ...this.variationTypeVolumeIdConnectionValidator(validatedData),
-    };
-
-    validatedData = {
-      ...validatedData,
-      ...this.variationTypeQuantityConnectionValidator(validatedData),
-    };
-
-    return validatedData;
-  }
-
   public idValidator(id: ProductVariation["id"] | undefined) {
     this.assertsDefined(id, "ProductVariation id cannot be empty");
 
@@ -132,7 +51,7 @@ export class ProductVariationValidator
     return variationType;
   }
 
-  private variationTypeVolumeIdConnectionValidator<
+  protected variationTypeVolumeIdConnectionValidator<
     T extends {
       variationType?: ProductVariation["variationType"];
       variationVolumeId?: ProductVariation["variationVolumeId"];
@@ -184,7 +103,7 @@ export class ProductVariationValidator
     }
   }
 
-  private variationTypeQuantityConnectionValidator<
+  protected variationTypeQuantityConnectionValidator<
     T extends {
       variationType?: ProductVariation["variationType"];
       quantity?: ProductVariation["quantity"];

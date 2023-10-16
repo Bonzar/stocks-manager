@@ -1,5 +1,5 @@
 import { ICreateDryPowder, IDryPowder } from "../DryPowder.js";
-import { BaseValidator } from "./BaseValidator.js";
+import { BaseValidator } from "./base/BaseValidator.js";
 import { IDryPowderValidator } from "../../interfaces/validators/IDryPowderValidator.js";
 
 export class DryPowderValidator
