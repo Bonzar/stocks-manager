@@ -1,4 +1,4 @@
-import { IBaseCRUDService } from "./IBaseCRUDService.js";
+import { IBaseCRUDService } from "./base/IBaseCRUDService.js";
 import {
   ICreateVariationVolume,
   IVariationVolume,
