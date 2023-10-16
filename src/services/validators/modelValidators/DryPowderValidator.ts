@@ -1,4 +1,3 @@
-import { BaseFieldsValidator } from "../fieldsValidators/base/BaseFieldsValidator.js";
 import { IDryPowderValidator } from "../../../domain/interfaces/validators/modelsValidators/IDryPowderValidator.js";
 import { IDryPowderFieldsValidator } from "../../../domain/interfaces/validators/fieldsValidators/IDryPowderFieldsValidator.js";
 import { DryPowderFieldsValidator } from "../fieldsValidators/DryPowderFieldsValidators/DryPowderFieldsValidator.js";
@@ -7,10 +6,7 @@ import {
   IDryPowder,
 } from "../../../domain/models/DryPowder.js";
 
-export class DryPowderValidator
-  extends BaseFieldsValidator
-  implements IDryPowderValidator
-{
+export class DryPowderValidator implements IDryPowderValidator {
   private fieldsValidator: IDryPowderFieldsValidator =
     new DryPowderFieldsValidator();
 
