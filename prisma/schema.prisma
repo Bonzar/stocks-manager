@@ -48,7 +48,7 @@ model ProductVariation {
   variationVolumeId   Int?
   setComponents       VariationSet[]       @relation("ComponentVariation")
   setParentVariation  VariationSet?        @relation("ParentVariation")
-  marketplaceProducts MarketplaceProduct[]
+  marketplaceProducts MarketplaceVariation[]
 
   @@unique([productId, variationVolumeId])
 }
@@ -63,7 +63,7 @@ model VariationSet {
   @@unique([parentVariationId, componentVariationId])
 }
 
-model MarketplaceProduct {
+model MarketplaceVariation {
   id                    Int              @id @default(autoincrement())
   productVariationId    Int
   externalId            String
@@ -77,9 +77,9 @@ model MarketplaceProduct {
 model Marketplace {
   id                  Int                  @id @default(autoincrement())
   name                String               @unique
-  coefficient         Float
+  coefficient         Int
   haveWarehouse       Boolean
-  marketplaceProducts MarketplaceProduct[]
+  marketplaceProducts MarketplaceVariation[]
 }
 
 model Log {
