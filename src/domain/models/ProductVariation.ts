@@ -2,8 +2,8 @@ import type {
   Prisma,
   ProductVariation as PrismaProductVariation,
 } from "@prisma/client";
-import type { IProductVariationValidator } from "../interfaces/validators/IProductVariationValidator.js";
-import { ProductVariationValidator } from "./validators/ProductVariationValidator/ProductVariationValidator.js";
+import { IProductVariationValidator } from "../interfaces/validators/modelsValidators/IProductVariationValidator.js";
+import { ProductVariationValidator } from "./validators/modelValidators/ProductVariationValidator.js";
 
 export interface IProductVariation extends PrismaProductVariation {}
 

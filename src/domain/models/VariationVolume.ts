@@ -2,8 +2,8 @@ import {
   Prisma,
   VariationVolume as PrismaVariationVolume,
 } from "@prisma/client";
-import { VariationVolumeValidator } from "./validators/VariationVolumeValidator.js";
-import { IVariationVolumeValidator } from "../interfaces/validators/IVariationVolumeValidator.js";
+import { IVariationVolumeValidator } from "../interfaces/validators/modelsValidators/IVariationVolumeValidator.js";
+import { VariationVolumeValidator } from "./validators/modelValidators/VariationVolumeValidator.js";
 
 export interface IVariationVolume extends PrismaVariationVolume {}
 

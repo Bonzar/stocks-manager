@@ -5,8 +5,8 @@ import type {
 import { DryPowder } from "../domain/models/DryPowder.js";
 import type { IDryPowderService } from "../domain/interfaces/services/IDryPowderService.js";
 import type { IDryPowderRepository } from "../domain/interfaces/repositories/IDryPowderRepository.js";
-import { DryPowderValidator } from "../domain/models/validators/DryPowderValidator.js";
-import { IDryPowderValidator } from "../domain/interfaces/validators/IDryPowderValidator.js";
+import { IDryPowderValidator } from "../domain/interfaces/validators/modelsValidators/IDryPowderValidator.js";
+import { DryPowderValidator } from "../domain/models/validators/modelValidators/DryPowderValidator.js";
 
 export class DryPowderService implements IDryPowderService {
   constructor(

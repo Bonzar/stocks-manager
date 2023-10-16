@@ -5,8 +5,8 @@ import {
 } from "../domain/models/ProductVariation.js";
 import type { IProductVariationService } from "../domain/interfaces/services/IProductVariationService.js";
 import type { IProductVariationRepository } from "../domain/interfaces/repositories/IProductVariationRepository.js";
-import type { IProductVariationValidator } from "../domain/interfaces/validators/IProductVariationValidator.js";
-import { ProductVariationValidator } from "../domain/models/validators/ProductVariationValidator/ProductVariationValidator.js";
+import { IProductVariationValidator } from "../domain/interfaces/validators/modelsValidators/IProductVariationValidator.js";
+import { ProductVariationValidator } from "../domain/models/validators/modelValidators/ProductVariationValidator.js";
 
 export class ProductVariationService implements IProductVariationService {
   constructor(

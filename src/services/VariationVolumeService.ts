@@ -1,4 +1,3 @@
-import { VariationVolumeValidator } from "../domain/models/validators/VariationVolumeValidator.js";
 import {
   ICreateVariationVolume,
   IVariationVolume,
@@ -6,7 +5,8 @@ import {
 } from "../domain/models/VariationVolume.js";
 import type { IVariationVolumeService } from "../domain/interfaces/services/IVariationVolumeService.js";
 import type { IVariationVolumeRepository } from "../domain/interfaces/repositories/IVariationVolumeRepository.js";
-import type { IVariationVolumeValidator } from "../domain/interfaces/validators/IVariationVolumeValidator.js";
+import { IVariationVolumeValidator } from "../domain/interfaces/validators/modelsValidators/IVariationVolumeValidator.js";
+import { VariationVolumeValidator } from "../domain/models/validators/modelValidators/VariationVolumeValidator.js";
 
 export class VariationVolumeService implements IVariationVolumeService {
   constructor(

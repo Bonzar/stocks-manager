@@ -1,6 +1,6 @@
 import { DryPowder as PrismaDryPowder, Prisma } from "@prisma/client";
-import { DryPowderValidator } from "./validators/DryPowderValidator.js";
-import { IDryPowderValidator } from "../interfaces/validators/IDryPowderValidator.js";
+import { IDryPowderValidator } from "../interfaces/validators/modelsValidators/IDryPowderValidator.js";
+import { DryPowderValidator } from "./validators/modelValidators/DryPowderValidator.js";
 
 export interface IDryPowder extends PrismaDryPowder {}
 

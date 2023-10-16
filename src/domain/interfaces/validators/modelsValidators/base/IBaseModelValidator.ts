@@ -1,10 +1,4 @@
-export type FieldsValidators<ModelType> = {
-  [K in keyof ModelType as `${K & string}Validator`]: (
-    arg: ModelType[K] | undefined,
-  ) => ModelType[K];
-};
-
-export type IValidator<
+export type IBaseModelValidator<
   ModelType extends object,
   ModelCreateType extends object,
 > = {
@@ -13,4 +7,8 @@ export type IValidator<
   updateValidator<T extends OmitId<ModelType>>(
     updateData: Partial<T>,
   ): Partial<T>;
-} & FieldsValidators<ModelType>;
+
+  idValidator<ModelWithId extends WithId<ModelType>>(
+    id: ModelWithId["id"] | undefined,
+  ): ModelWithId["id"];
+};

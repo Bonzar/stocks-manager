@@ -1,6 +1,6 @@
 import { Prisma, Product as PrismaProduct } from "@prisma/client";
-import { ProductValidator } from "./validators/ProductValidator.js";
-import { IProductValidator } from "../interfaces/validators/IProductValidator.js";
+import { IProductValidator } from "../interfaces/validators/modelsValidators/IProductValidator.js";
+import { ProductValidator } from "./validators/modelValidators/ProductValidator.js";
 
 export interface IProduct extends PrismaProduct {}
 

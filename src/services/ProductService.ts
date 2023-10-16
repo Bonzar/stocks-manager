@@ -1,8 +1,9 @@
-import { ProductValidator } from "../domain/models/validators/ProductValidator.js";
-import { ICreateProduct, IProduct, Product } from "../domain/models/Product.js";
 import type { IProductService } from "../domain/interfaces/services/IProductService.js";
 import type { IProductRepository } from "../domain/interfaces/repositories/IProductRepository.js";
-import type { IProductValidator } from "../domain/interfaces/validators/IProductValidator.js";
+import type { ICreateProduct, IProduct } from "../domain/models/Product.js";
+import { Product } from "../domain/models/Product.js";
+import { ProductValidator } from "../domain/models/validators/modelValidators/ProductValidator.js";
+import { IProductValidator } from "../domain/interfaces/validators/modelsValidators/IProductValidator.js";
 
 export class ProductService implements IProductService {
   constructor(

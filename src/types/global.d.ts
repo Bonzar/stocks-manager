@@ -18,4 +18,6 @@ declare global {
       };
 
   type OmitId<T extends Record<unknown, unknown>> = Omit<T, "id">;
+  type WithId<T extends Record<unknown, unknown>> = Omit<T, "id"> &
+    Record<"id", IdType>;
 }

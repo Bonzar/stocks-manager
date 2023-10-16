@@ -1,4 +1,4 @@
-export abstract class BaseValidator {
+export abstract class BaseFieldsValidator {
   protected assertsDefined<T>(
     arg: T | undefined,
     errorMsg: string,
