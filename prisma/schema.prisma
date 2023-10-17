@@ -65,13 +65,15 @@ model VariationSet {
 
 model MarketplaceVariation {
   id                    Int              @id @default(autoincrement())
-  productVariationId    Int
   externalId            String
   isActive              Boolean          @default(true)
   quantityOnMarketplace Int?
   marketplace           Marketplace      @relation(fields: [marketplaceId], references: [id])
   marketplaceId         Int
+  productVariationId    Int
   productVariation      ProductVariation @relation(fields: [productVariationId], references: [id])
+
+  @@unique([externalId, marketplaceId])
 }
 
 model Marketplace {
